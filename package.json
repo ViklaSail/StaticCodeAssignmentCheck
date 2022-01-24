@@ -1,0 +1,15 @@
+{
+  "name": "staattinenkoodicheck",
+  "version": "1.0.0",
+  "description": "staattinen tarkastus",
+  "main": "codeCheck.js",
+  "dependencies": {
+    "jshint": "^2.13.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
