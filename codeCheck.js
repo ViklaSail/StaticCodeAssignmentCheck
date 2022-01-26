@@ -22,8 +22,9 @@ var filecount = 0;
 const testitiedosto = './palautetut/tan.js';
 /** testi alkaa */
 // First I want to read the file
-function readFileToArray(arr,tiedosto, callback) {
+function readFileToArray(arr,tiedosto, statCallback, callback) {
   console.log(tiedosto);
+  console.log(statCallback);
   //callback("testing"+tiedosto);
   fs.readFile(tiedosto, function read(err, data) {
     if (err) {
@@ -34,15 +35,17 @@ function readFileToArray(arr,tiedosto, callback) {
 
     // Invoke the next step here however you like
     console.log(content);   // Put all of the code here (not the best solution)
-    processFile(content);   // Or put the next step in a function and invoke it
+    processFile(content, statCallback);   // Or put the next step in a function and invoke it
     callback(arr);
   });
   console.log("LOPPU READFILETOARRAY");
 }
 
-function processFile(content) {
-  console.log(content.toString('utf-8'));// TÄMÄ TOIMII, MITEN LAITETAAN MAINISTA KUTSU? 
+function processFile(content, staCallBack) {
+  console.log(content.toString('utf-8'));// TÄMÄ TOIMII, MITEN LAITETAAN MAINISTA KUTSU? laitetaan tänne asti se callback funktio joka laskee milloin voi kirjoitella filen. 
+  //fileStatisticsCallback tänne parametrina ja sitä sitten kutsutaan joka kerta!!!!
   JSHINT(content.toString('utf-8'),{ undef: true, "node": true}); //"node": true
+  staCallBack("statistiikkarivi"+1); //LOPPUOSA TÄSTÄ FUNKTIOSTA WITTUUN... TODOTODO
   lista.push(JSHINT.data()); //lisää tietorakenne tähän, lisäksi tiedoston nimi. 
   filecount++;
   console.log("icon " + icon.length);
@@ -57,7 +60,7 @@ function processFile(content) {
 }
 //**testi loppuu */
 
-function fillArray(arr, callback) {
+function fillArray(arr, statisticallback, callback) {
   const dirPath = path.join(__dirname, "./palautetut/");
   fs.readdir(dirPath, function (err, files) {
     if (err) {
@@ -66,7 +69,7 @@ function fillArray(arr, callback) {
     files.forEach(function (file) {
         // kutsutaan filen luku async
         //readFileToArray(rivit, './palautetut/tan.js', (content) => {
-        readFileToArray(rivit, "./palautetut/"+file, (content) => {
+        readFileToArray(rivit, "./palautetut/"+file, statisticallback, (content) => { //TÄMÄ KUTSU POIS TODO TÄSSÄ ONGELMAA. 
             console.log("content: ", content);
             console.log("callback" + filecount);
         });
@@ -78,6 +81,12 @@ function fillArray(arr, callback) {
   });
 }
 
+//tässä lasketaan montako fileä on käsitelty. tämä välitetään parametrina ketjuun
+function fileStatisticsCallback(statisticsLine){
+  console.log(filecount);
+  // kutsuttaessa lisää tilasto-arrayhyn tarvittavat tiedot (globaali array?). kun on kutsuttu yhtä monta kertaa kun on rivejä filenamelistassa
+  //kirjoitetaan tilasto-array tiedostoon ja lähdetään wittuun. Tässä on ongelmana ainoastaan sen funktio-osoittimen tuominen tänne asti. 
+}
 
 if (require.main === module) {
   //var rivit =  [];
@@ -89,14 +98,14 @@ if (require.main === module) {
 */
 
   console.log("luotaan hakemiston tiedostonimet async callback");
-  fillArray(icon, (filelist) => {
+  fillArray(icon, fileStatisticsCallback, (filelist) => {
     console.log("content: ", filelist); 
     //readFileToArray(rivit, './palautetut/tan.js', (content2) => {
-      /*
-    readFileToArray(rivit, filelist, (content2) => {
+      
+/*    readFileToArray(rivit, filelist, (content2) => {
         console.log("content: ", content2);
-    });
-*/
+    });*/
+
   });
 
 }
