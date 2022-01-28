@@ -8,30 +8,57 @@
  *  */
   // https://stackoverflow.com/questions/4009756/how-to-count-string-occurrence-in-string
   // 
-  var testing = require('./testVariables');
-  function checkRequiredReserwedWords(code){
-    var warningList = checkWords(code,testing.requiredVariableNames);
-    return testing.reservedReport; // BE WARE this need to be a list
-    //return "alert: 3 should be 1";
-  }
-  
+var codeTesting = "var nimi = \"jaakko\";\r\nvar ika = \"20\";\r\nvar ammatti =\"huoltomies\"\r\n\r\nalert(nimi);\r\nalert(ika);\r\nalert(ammatti);\r\n\r\n\r\n\r\n";
+
+const testVariables = require('./testVariables');
+var testing = require('./testVariables');
+
+function checkRequiredReserwedWords(code){
+  var warningList = checkWords(code,testing.requiredVariableNames);
+  return testing.reservedReport; // BE WARE this need to be a list
+  //returns "alert: 3 should be 1";
+}
+
+
   function checkRequiredVariableNames(code){
-    var warningList = checkWords(code, testing.requiredVariableNames);
+    var warningList = checkWords(code, requiredVariableNames);
     return testing.variableReport; // BE WARE this need to be a list
     //return "nimi: 0 should be 1";
     //return resulttable;
   }
   
-  function checkWords(wordlist) {
+  function checkWords(code, wordlist) {
     var warninglist = [];
-    for (let i = 0; i < wordlist.length; i++) {
-        // code here Andreas
-        // if word count in file is different compared to what required, write warning in warning list
+    for (const prop in wordlist) {
+       value = wordlist[prop];
+       code_count = occurrences(code, prop, 1);
+       if (value != code_count) {
+         warninglist.push(prop + ": " + code_count + " should be " + value)
+       }
 
     }
-    return warninglist; // BE WARE this need to be a list
+    return warninglist; // list
   }
 
+  function occurrences(string, subString, allowOverlapping) {
+
+    string += "";
+    subString += "";
+    if (subString.length <= 0) return (string.length + 1);
+
+    var n = 0,
+        pos = 0,
+        step = allowOverlapping ? 1 : subString.length;
+
+    while (true) {
+        pos = string.indexOf(subString, pos);
+        if (pos >= 0) {
+            ++n;
+            pos += step;
+        } else break;
+    }
+    return n;
+  }
   /**
    * Prepares report. pdf is at all possible and saves it to root folder.
    * levels of errors to print need to be thought of, user defined. 
