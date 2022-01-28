@@ -6,6 +6,7 @@
 // nimien erottaminen tiedostonnimistä
 // yhdistä collaboration checkeriin
 
+var taskChecking = require('./taskCheck');
 
 const testFolder = './palautetut/';
 const fs = require('fs');
@@ -14,19 +15,41 @@ const lista =[];
 var icon = [];
 var studentSubmissionAnalysis = [];
 var rivit = [];
-var fileErrors = []
+var fileErrors = [];
 const path = require('path');
 var filecount = 0;
 
+/**
+ * Need to check following
+ * max lines of code
+ * keywords needed according to task description
+ *  - required variable and function names
+ *  - required reserved words, like while, for, if, and counts of those words
+ *  - if required word is not found, then error should be recorded on it. 
+ *  */
+/*var requiredVariableNames = [
+  {alert: 1, for:1, if:1}
+];
+var requiredReservedWords = [
+  {nimi: 1, ikä:1}
+];
+// https://stackoverflow.com/questions/4009756/how-to-count-string-occurrence-in-string
+// 
+function checkRequiredReserwedWords(text){
+  for (let i = 0; i < requiredReservedWords.length; i++) {
+    //check if word count equals to required word count
+  }
+  return "alert: 3 should be 1";
+}
 
+function checkRequiredVariableNames(text){
 
-const testitiedosto = './palautetut/tan.js';
-/** testi alkaa */
+  return "nimi: 0 should be 1";
+}
+*/
 // First I want to read the file
 function readFileToArray(arr,tiedosto, statCallback, callback) {
   console.log(tiedosto);
-  //console.log(statCallback);
-  //callback("testing"+tiedosto);
   fs.readFile(tiedosto, function read(err, data) {
     if (err) {
         throw err;
@@ -34,21 +57,35 @@ function readFileToArray(arr,tiedosto, statCallback, callback) {
     const content = data;
     arr = data;
     // Invoke the next step here however you like
-    console.log(content);   // Put all of the code here (not the best solution)
-    processFile(content, statCallback);   // Or put the next step in a function and invoke it
+    //console.log(content);   // Put all of the code here (not the best solution)
+    //"./palautetut/Aku Kontiainen_1724149_assignsubmission_file_script.js"
+    let tiedostoNimi = tiedosto.replace("./palautetut/", "");
+    processFile(tiedostoNimi, content, statCallback);   // Or put the next step in a function and invoke it
     callback(arr);
   });
   console.log("LOPPU READFILETOARRAY");
 }
 
-function processFile(content, staCallBack) {
-  console.log(content.toString('utf-8'));// TÄMÄ TOIMII, MITEN LAITETAAN MAINISTA KUTSU? laitetaan tänne asti se callback funktio joka laskee milloin voi kirjoitella filen. 
+/**
+ * ProcessFile: extract information of the file and write it to statisticsline for a file
+ * @param {*} content 
+ * @param {*} staCallBack 
+ */
+function processFile(tiedostonimi, content, staCallBack) {
+  let koodi = content.toString('utf-8');
+  let errcount = 0;
+  console.log(koodi);
   //fileStatisticsCallback tänne parametrina ja sitä sitten kutsutaan joka kerta!!!!
-  JSHINT(content.toString('utf-8'),{ undef: true, "node": true}); //"node": true
+  JSHINT(content.toString('utf-8'),{ undef: true, "node": true, "devel": true}); //"node": true
   lista.push(JSHINT.data()); //lisää tietorakenne tähän, lisäksi tiedoston nimi. 
-  
+  if(JSHINT.data().errors){
+    errcount = JSHINT.data().errors.length;
+    firsterror = JSHINT.data().errors[0].raw;
+  }
+  var commandWarnings = taskChecking.checkRequiredReserwedWords(koodi);
+  var variableWarnings = taskChecking.checkRequiredVariableNames(koodi);
   console.log("icon " + icon.length);
-  staCallBack("statistiikkarivi"+1); 
+  staCallBack(tiedostonimi+" virheitä " + errcount + " ensimäinen virheteksti" + firsterror, commandWarnings, variableWarnings); 
 
 }
 //**testi loppuu */
@@ -89,8 +126,6 @@ function fileStatisticsCallback(statisticsLine){
 
 if (require.main === module) {
   console.log("luetaan tiedosto async");
-
-
   console.log("luotaan hakemiston tiedostonimet async callback");
   fillArray(icon, fileStatisticsCallback, (filelist) => {
     console.log("content: ", filelist); 
