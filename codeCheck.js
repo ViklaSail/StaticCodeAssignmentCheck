@@ -5,48 +5,23 @@
 // TODO: errorit csv-tiedostoon
 // nimien erottaminen tiedostonnimistä
 // yhdistä collaboration checkeriin
+// raportointi
+// https://www.npmjs.com/package/html-pdf
 
 var taskChecking = require('./taskCheck');
 
-const testFolder = './palautetut/';
-const fs = require('fs');
+var testFolder = './palautetut/';
+var fs = require('fs');
 const { JSHINT } = require('jshint');
-const lista =[];
+var lista =[];
 var icon = [];
 var studentSubmissionAnalysis = [];
 var rivit = [];
 var fileErrors = [];
-const path = require('path');
+var path = require('path');
 var filecount = 0;
 
-/**
- * Need to check following
- * max lines of code
- * keywords needed according to task description
- *  - required variable and function names
- *  - required reserved words, like while, for, if, and counts of those words
- *  - if required word is not found, then error should be recorded on it. 
- *  */
-/*var requiredVariableNames = [
-  {alert: 1, for:1, if:1}
-];
-var requiredReservedWords = [
-  {nimi: 1, ikä:1}
-];
-// https://stackoverflow.com/questions/4009756/how-to-count-string-occurrence-in-string
-// 
-function checkRequiredReserwedWords(text){
-  for (let i = 0; i < requiredReservedWords.length; i++) {
-    //check if word count equals to required word count
-  }
-  return "alert: 3 should be 1";
-}
 
-function checkRequiredVariableNames(text){
-
-  return "nimi: 0 should be 1";
-}
-*/
 // First I want to read the file
 function readFileToArray(arr,tiedosto, statCallback, callback) {
   console.log(tiedosto);
@@ -56,9 +31,6 @@ function readFileToArray(arr,tiedosto, statCallback, callback) {
     }
     const content = data;
     arr = data;
-    // Invoke the next step here however you like
-    //console.log(content);   // Put all of the code here (not the best solution)
-    //"./palautetut/Aku Kontiainen_1724149_assignsubmission_file_script.js"
     let tiedostoNimi = tiedosto.replace("./palautetut/", "");
     processFile(tiedostoNimi, content, statCallback);   // Or put the next step in a function and invoke it
     callback(arr);
@@ -81,12 +53,13 @@ function processFile(tiedostonimi, content, staCallBack) {
   if(JSHINT.data().errors){
     errcount = JSHINT.data().errors.length;
     firsterror = JSHINT.data().errors[0].raw;
+    errorList = JSHINT.data().errors[0];
   }
   var commandWarnings = taskChecking.checkRequiredReserwedWords(koodi);
   var variableWarnings = taskChecking.checkRequiredVariableNames(koodi);
   console.log("icon " + icon.length);
-  staCallBack(tiedostonimi+" virheitä " + errcount + " ensimäinen virheteksti" + firsterror, commandWarnings, variableWarnings); 
-
+  //staCallBack(tiedostonimi+" virheitä " + errcount + " ensimäinen virheteksti" + firsterror, commandWarnings, variableWarnings); 
+  staCallBack(tiedostonimi, errcount, errorList, commandWarnings, variableWarnings); 
 }
 //**testi loppuu */
 
@@ -97,8 +70,6 @@ function fillArray(arr, statisticallback, callback) {
       return console.log("Unable to scan directory: " + err);
     }
     files.forEach(function (file) {
-        // kutsutaan filen luku async
-        //readFileToArray(rivit, './palautetut/tan.js', (content) => {
         readFileToArray(rivit, "./palautetut/"+file, statisticallback, (content) => { //TÄMÄ KUTSU POIS TODO TÄSSÄ ONGELMAA. EIKÄ OLE
             console.log("content: ", content);
             console.log("callback" + filecount);
@@ -112,15 +83,19 @@ function fillArray(arr, statisticallback, callback) {
 }
 
 //tässä lasketaan montako fileä on käsitelty. tämä välitetään parametrina ketjuun
-function fileStatisticsCallback(statisticsLine){
+// https://www.npmjs.com/package/html-pdf raportin tekoon tässä? kutsutaanko erillistä funktiota? Kyllä. 
+function fileStatisticsCallback(tiedostonimi, errcount, errorList, commandWarnings, variableWarnings){
+  filereport = [tiedostonimi,errcount,errorList, commandWarnings, variableWarnings];
   console.log(filecount);
   filecount++;
   // kutsuttaessa lisää tilasto-arrayhyn tarvittavat tiedot (globaali array?). kun on kutsuttu yhtä monta kertaa kun on rivejä filenamelistassa
-  //kirjoitetaan tilasto-array tiedostoon ja lähdetään wittuun. Tässä on ongelmana ainoastaan sen funktio-osoittimen tuominen tänne asti. 
+  //kirjoitetaan tilasto-array tiedostoon ja lähdetään. Tässä on ongelmana ainoastaan sen funktio-osoittimen tuominen tänne asti. 
   var tiedostoLkm = icon.length;
-  studentSubmissionAnalysis.push(statisticsLine);
+  studentSubmissionAnalysis.push(filereport);
   if (filecount>=tiedostoLkm) {
-    console.log("kirjoitetaan analyysi-taulukko tiedostoon");
+    console.log("kirjoitetaan analyysi-taulukko tiedostoon, tehdään raportti. ");
+    taskChecking.prepareReport(studentSubmissionAnalysis);
+
   }
 }
 

@@ -12,7 +12,7 @@ const student_folder = "\palautetut";
     try {
         // Get the files as an array
         const files = await fs.promises.readdir( student_folder );
-        console.log(files)
+        console.log(files);
         student_number = files.length;
         for (let i = 0; i < student_number; i++) {
             data = files[i] ;
