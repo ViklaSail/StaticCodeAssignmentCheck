@@ -1,11 +1,9 @@
-var codeTesting = "var nimi = \"jaakko\";\r\nvar ika = \"20\";\r\nvar ammatti =\"huoltomies\"\r\n\r\nalert(nimi);\r\nalert(ika);\r\nalert(ammatti);\r\n\r\n\r\n\r\n";
+codeTesting = "var nimi = \"jaakko\";\r\nvar ika = \"20\";\r\nvar ammatti =\"huoltomies\"\r\n\r\nalert(nimi);\r\nalert(ika);\r\nalert(ammatti);\r\n\r\n\r\n\r\n";
 
-var requiredVariableNames = [
-    {alert: 1, for:1, if:1}
-  ];
-var requiredReservedWords = [
-    {nimi: 1, ikä:1}
-  ];
+requiredVariableNames = [{nimi: 1}, {ikä:1} ];
+requiredReservedWords = [{alert: 1}, {for:1}, {if:1}];
+requiredVariableNamesNew = [{name:"nimi", count: 1}, {name:"ikä",count:1} ];
+requiredReservedWordsNew = [{name:"alert", count: 1}, {name:"for", count:1}, {name:"if",count:1}];
 
 // EXAMPLES OF RETURNED LISTS FROM 
 //function checkRequiredReserwedWords(code){
@@ -107,16 +105,24 @@ forReportTest3 = [
     ],
   ];
 
-
-
-
+/*
+  module.exports = requiredVariableNames;
+  module.exports = requiredReservedWords;
+  module.exports = codeTesting;
+  module.exports = reservedReport;
+  module.exports = variableReport;
+  module.exports = forReportTest3;
+*/
 module.exports = {
+    goo: "googoo",
     codeTesting: codeTesting,
     requiredVariableNames: requiredVariableNames,
     requiredReservedWords: requiredReservedWords,
     reservedReport: reservedReport,
     variableReport: variableReport,
-    forReportTest3: forReportTest3
+    forReportTest3: forReportTest3,
+    requiredVariableNamesNew:requiredVariableNamesNew,
+    requiredReservedWordsNew:requiredReservedWordsNew
 };
 
 bigtestforReport = [
@@ -510,4 +516,4 @@ bigtestforReport = [
         "var: 0 should be 1",
       ],
     ],
-  ]
+  ];

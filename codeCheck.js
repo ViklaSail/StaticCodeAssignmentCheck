@@ -46,22 +46,32 @@ function readFileToArray(arr,tiedosto, statCallback, callback) {
 function processFile(tiedostonimi, content, staCallBack) {
   let koodi = content.toString('utf-8');
   let errcount = 0;
+  let errorList =[];
   console.log(koodi);
   //fileStatisticsCallback tänne parametrina ja sitä sitten kutsutaan joka kerta!!!!
   JSHINT(content.toString('utf-8'),{ undef: true, "node": true, "devel": true}); //"node": true
   lista.push(JSHINT.data()); //lisää tietorakenne tähän, lisäksi tiedoston nimi. 
   if(JSHINT.data().errors){
     errcount = JSHINT.data().errors.length;
-    firsterror = JSHINT.data().errors[0].raw;
-    errorList = JSHINT.data().errors[0];
+    errorList = JSHINT.data().errors;
   }
+  var reducedErrorList = reduceErrors(errorList);
   var commandWarnings = taskChecking.checkRequiredReserwedWords(koodi);
   var variableWarnings = taskChecking.checkRequiredVariableNames(koodi);
   console.log("icon " + icon.length);
   //staCallBack(tiedostonimi+" virheitä " + errcount + " ensimäinen virheteksti" + firsterror, commandWarnings, variableWarnings); 
-  staCallBack(tiedostonimi, errcount, errorList, commandWarnings, variableWarnings); 
+  staCallBack(tiedostonimi, errcount, reducedErrorList, commandWarnings, variableWarnings); 
 }
 //**testi loppuu */
+function reduceErrors(list){
+  var reducedErrorList = [];
+  if(list){
+    for(i=0;i<list.length;i++){
+      reducedErrorList.push(list[i].raw+" line: "+list[i].line)
+    }
+  }
+  return reducedErrorList;
+}
 
 function fillArray(arr, statisticallback, callback) {
   const dirPath = path.join(__dirname, "./palautetut/");
