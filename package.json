@@ -4,7 +4,8 @@
   "description": "staattinen tarkastus",
   "main": "codeCheck.js",
   "dependencies": {
-    "jshint": "^2.13.3"
+    "jshint": "^2.13.4",
+    "prompt": "^1.2.1"
   },
   "devDependencies": {},
   "scripts": {

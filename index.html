@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+<script> 
+function arvaaluku(arvattava) {
+   var arvasiOikein = false;
+   var annettuLuku=1;
+   while(annettuLuku != 0) {
+    annettuLuku = prompt("anna luku");
+        annettuNumerona = Number(annettuLuku);
+        if(annettuNumerona < arvattava) {
+            console.log("antamasi luku oli pienempi kuin vertailuluku");
+        } else if(annettuNumerona > arvattava) {
+            console.log("antamasi luku oli suurempi kuin vertailuluku");
+        } else {
+            console.log("arvasit oikein");
+            arvasiOikein = true;
+        }       
+   }
+   return arvasiOikein;
+}
+
+prompt("annappa luku");
+var tulos = arvaaluku(20);
+
+</script>
+
+</body>
+</html> 
