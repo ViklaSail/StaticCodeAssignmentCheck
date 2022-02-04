@@ -3,6 +3,9 @@
 // kirjoitetaan tiedostokohtainen raportti virheistä: tiedoston nimessä on käyttäjän nimi
 // lähetetään korjauskehotus viestiä kullekkin käyttäjälle: generoi mailit exelillä? alla ohje
 // TODO: errorit csv-tiedostoon
+// TODO: quiz - csv handlaus.
+// TODO: quiz - random kysymys handlaus
+// TODO: 
 // nimien erottaminen tiedostonnimistä
 // yhdistä collaboration checkeriin
 // raportointi
@@ -23,7 +26,7 @@ var filecount = 0;
 
 
 // First I want to read the file
-function readFileToArray(arr,tiedosto, statCallback, callback) {
+function readFileToArray(arr, stringsToCheck, tiedosto, statCallback, callback) {
   console.log(tiedosto);
   fs.readFile(tiedosto, function read(err, data) {
     if (err) {
@@ -32,7 +35,7 @@ function readFileToArray(arr,tiedosto, statCallback, callback) {
     const content = data;
     arr = data;
     let tiedostoNimi = tiedosto.replace("./palautetut/", "");
-    processFile(tiedostoNimi, content, statCallback);   // Or put the next step in a function and invoke it
+    processFile(tiedostoNimi, stringsToCheck, content, statCallback);   // Or put the next step in a function and invoke it
     callback(arr);
   });
   console.log("LOPPU READFILETOARRAY");
@@ -43,7 +46,7 @@ function readFileToArray(arr,tiedosto, statCallback, callback) {
  * @param {*} content 
  * @param {*} staCallBack 
  */
-function processFile(tiedostonimi, content, staCallBack) {
+function processFile(tiedostonimi, stringsToCheck, content, staCallBack) {
   let koodi = content.toString('utf-8');
   let errcount = 0;
   let errorList =[];
@@ -56,8 +59,8 @@ function processFile(tiedostonimi, content, staCallBack) {
     errorList = JSHINT.data().errors;
   }
   var errorObject = reduceErrors(errorList);
-  var commandWarnings = taskChecking.checkRequiredReserwedWords(koodi);
-  var variableWarnings = taskChecking.checkRequiredVariableNames(koodi);
+  var commandWarnings = taskChecking.checkRequiredReserwedWords(koodi,stringsToCheck);
+  var variableWarnings = taskChecking.checkRequiredVariableNames(koodi,stringsToCheck);
   console.log("icon " + icon.length);
   //staCallBack(tiedostonimi+" virheitä " + errcount + " ensimäinen virheteksti" + firsterror, commandWarnings, variableWarnings); 
   var submission = {};
@@ -85,15 +88,21 @@ function reduceErrors(list){
   //return reducedErrorList;
 }
 
-
-function fillArray(arr, statisticallback, callback) {
+/**
+ * Skannaa hakemiston tiedostot ja kutsuu joka tiedostolle checkkiä
+ * @param {*} arr 
+ * @param {*} stringsToCheck : words and wordcounts to check from code
+ * @param {*} statisticallback 
+ * @param {*} callback 
+ */
+function fillArray(arr, stringsToCheck, statisticallback, callback) {
   const dirPath = path.join(__dirname, "./palautetut/");
   fs.readdir(dirPath, function (err, files) {
     if (err) {
       return console.log("Unable to scan directory: " + err);
     }
     files.forEach(function (file) {
-        readFileToArray(rivit, "./palautetut/"+file, statisticallback, (content) => { //TÄMÄ KUTSU POIS TODO TÄSSÄ ONGELMAA. EIKÄ OLE
+        readFileToArray(rivit, stringsToCheck, "./palautetut/"+file, statisticallback, (content) => { //TÄMÄ KUTSU POIS TODO TÄSSÄ ONGELMAA. EIKÄ OLE
             console.log("content: ", content);
             console.log("callback" + filecount);
         });
@@ -124,9 +133,10 @@ function fileStatisticsCallback(submissionRecord){
 }
 
 if (require.main === module) {
+  var taskDetailsToCheck = taskChecking.getTaskDetailsForChecking();
   console.log("luetaan tiedosto async");
   console.log("luotaan hakemiston tiedostonimet async callback");
-  fillArray(icon, fileStatisticsCallback, (filelist) => {
+  fillArray(icon, taskDetailsToCheck, fileStatisticsCallback, (filelist) => {
     console.log("content: ", filelist); 
   });
 

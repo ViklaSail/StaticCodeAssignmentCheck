@@ -1,18 +1,27 @@
 // Viikko 2 Koodaustehtävä (6.2. klo 12:00 mennessä)
-tässä jotain vikana
+//tässä jotain vikana
 examVk2codingVariables = {
-  Question1: { variables: [{nimi: 1}, {ikä:1} ],
-                commands:  [{nimi: 1}, {ikä:1} ]},
-  Question2: {},
-  Question3: {}
-}
-
-
+Question1: { 
+              variables: [{name:"luvunArvaus", count: 1}, {name:"vertaa",count:1} ],
+              commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1} ]
+              //linecount: 20
+            },
+Question2: {
+            variables: [{name:"luvunArvaus", count: 1}, {name:"vertaa",count:1} ],
+            commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1}]
+          },
+Question3: {
+          variables: [{name:"luvunArvaus", count: 1}, {name:"vertaa",count:1} ],
+          commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1}]  
+  }
+};
+//requiredVariableNamesNew = [];
+///requiredReservedWordsNew = [{name:"alert", count: 1}, {name:"for", count:1}, {name:"if",count:1}];
 
 codeTesting = "var nimi = \"jaakko\";\r\nvar ika = \"20\";\r\nvar ammatti =\"huoltomies\"\r\n\r\nalert(nimi);\r\nalert(ika);\r\nalert(ammatti);\r\n\r\n\r\n\r\n";
 
-requiredVariableNames = [{nimi: 1}, {ikä:1} ];
-requiredReservedWords = [{alert: 1}, {for:1}, {if:1}];
+//requiredVariableNames = [{nimi: 1}, {ikä:1} ];
+//requiredReservedWords = [{alert: 1}, {for:1}, {if:1}];
 requiredVariableNamesNew = [{name:"nimi", count: 1}, {name:"ikä",count:1} ];
 requiredReservedWordsNew = [{name:"alert", count: 1}, {name:"for", count:1}, {name:"if",count:1}];
 
@@ -127,13 +136,14 @@ forReportTest3 = [
 module.exports = {
     goo: "googoo",
     codeTesting: codeTesting,
-    requiredVariableNames: requiredVariableNames,
-    requiredReservedWords: requiredReservedWords,
+    //requiredVariableNames: requiredVariableNames,
+    //requiredReservedWords: requiredReservedWords,
     reservedReport: reservedReport,
     variableReport: variableReport,
     forReportTest3: forReportTest3,
     requiredVariableNamesNew:requiredVariableNamesNew,
-    requiredReservedWordsNew:requiredReservedWordsNew
+    requiredReservedWordsNew:requiredReservedWordsNew,
+    examVk2codingVariables: examVk2codingVariables
 };
 
 bigtestforReport = [

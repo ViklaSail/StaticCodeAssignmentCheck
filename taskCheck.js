@@ -11,16 +11,31 @@
 var codeTesting = "var nimi = \"jaakko\";\r\nvar ika = \"20\";\r\nvar ammatti =\"huoltomies\"\r\n\r\nalert(nimi);\r\nalert(ika);\r\nalert(ammatti);\r\n\r\n\r\n\r\n";
 
 var testing = require('./testVariables');
+/**
+ * gets task details from a configuration file, or extracts them from task description. 
+ * For that task description need to have a formatted section for easy parsing
+ * Called from codeCheck once. 
+ * Suggestions: 
+ * 1. required commands and names (function + variables) with minimum counts needed. 
+ * 2. Needed minimum row count of a file (possibly exclude empty lines!!! )
+ */
+function getTaskDetailsForChecking() {
+  //var toBeChecked =testing.requiredReservedWordsNew;
+  var toBeChecked = testing.examVk2codingVariables;
+  return toBeChecked;
+}
 
-function checkRequiredReserwedWords(code){
-  var warningList = checkWords(code,testing.requiredReservedWordsNew);
+
+function checkRequiredReserwedWords(code, stringsToCheck){
+  
+  var warningList = checkWords(code, PerformanceResourceTiming.requiredReservedWordsNew);
   warningList.type="ResevedWords";
   return warningList; // BE WARE this need to be a list
   //returns "alert: 3 should be 1";
 }
 
 
-function checkRequiredVariableNames(code){
+function checkRequiredVariableNames(code, stringsToCheck){
   var warningList = checkWords(code, testing.requiredVariableNamesNew);
   warningList.type="RequiredNames";
   return warningList; // BE WARE this need to be a list
@@ -105,6 +120,7 @@ function checkWords(code, wordlist) {
   module.exports = {
     checkRequiredReserwedWords: checkRequiredReserwedWords,
     checkRequiredVariableNames: checkRequiredVariableNames,
-    prepareReport: prepareReport
+    prepareReport: prepareReport,
+    getTaskDetailsForChecking: getTaskDetailsForChecking
   };
 
