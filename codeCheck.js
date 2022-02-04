@@ -55,23 +55,36 @@ function processFile(tiedostonimi, content, staCallBack) {
     errcount = JSHINT.data().errors.length;
     errorList = JSHINT.data().errors;
   }
-  var reducedErrorList = reduceErrors(errorList);
+  var errorObject = reduceErrors(errorList);
   var commandWarnings = taskChecking.checkRequiredReserwedWords(koodi);
   var variableWarnings = taskChecking.checkRequiredVariableNames(koodi);
   console.log("icon " + icon.length);
   //staCallBack(tiedostonimi+" virheitä " + errcount + " ensimäinen virheteksti" + firsterror, commandWarnings, variableWarnings); 
-  staCallBack(tiedostonimi, errcount, reducedErrorList, commandWarnings, variableWarnings); 
+  var submission = {};
+  submission.file = tiedostonimi;
+  submission.errors = errorObject;
+  submission.commands = commandWarnings;
+  submission.variables =variableWarnings;
+  //staCallBack(tiedostonimi, errcount, reducedErrorList, commandWarnings, variableWarnings); 
+  staCallBack(submission);
 }
 //**testi loppuu */
 function reduceErrors(list){
+  var errorObject = {"errcount": list.length};
+  var errline ="";
   var reducedErrorList = [];
   if(list){
     for(i=0;i<list.length;i++){
       reducedErrorList.push(list[i].raw+" line: "+list[i].line)
+      errline = errline + list[i].raw+" line: "+ list[i].line + "! ";
     }
   }
-  return reducedErrorList;
+  errorObject.errortxt = errline;
+  errorObject.type="Error";
+  return errorObject; 
+  //return reducedErrorList;
 }
+
 
 function fillArray(arr, statisticallback, callback) {
   const dirPath = path.join(__dirname, "./palautetut/");
@@ -94,14 +107,15 @@ function fillArray(arr, statisticallback, callback) {
 
 //tässä lasketaan montako fileä on käsitelty. tämä välitetään parametrina ketjuun
 // https://www.npmjs.com/package/html-pdf raportin tekoon tässä? kutsutaanko erillistä funktiota? Kyllä. 
-function fileStatisticsCallback(tiedostonimi, errcount, errorList, commandWarnings, variableWarnings){
-  filereport = [tiedostonimi,errcount,errorList, commandWarnings, variableWarnings];
+//function fileStatisticsCallback(tiedostonimi, errcount, errorList, commandWarnings, variableWarnings){
+function fileStatisticsCallback(submissionRecord){
+    //filereport = [tiedostonimi,errcount,errorList, commandWarnings, variableWarnings];
   console.log(filecount);
   filecount++;
   // kutsuttaessa lisää tilasto-arrayhyn tarvittavat tiedot (globaali array?). kun on kutsuttu yhtä monta kertaa kun on rivejä filenamelistassa
   //kirjoitetaan tilasto-array tiedostoon ja lähdetään. Tässä on ongelmana ainoastaan sen funktio-osoittimen tuominen tänne asti. 
   var tiedostoLkm = icon.length;
-  studentSubmissionAnalysis.push(filereport);
+  studentSubmissionAnalysis.push(submissionRecord);
   if (filecount>=tiedostoLkm) {
     console.log("kirjoitetaan analyysi-taulukko tiedostoon, tehdään raportti. ");
     taskChecking.prepareReport(studentSubmissionAnalysis);

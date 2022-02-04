@@ -1,3 +1,14 @@
+// Viikko 2 Koodaustehtävä (6.2. klo 12:00 mennessä)
+tässä jotain vikana
+examVk2codingVariables = {
+  Question1: { variables: [{nimi: 1}, {ikä:1} ],
+                commands:  [{nimi: 1}, {ikä:1} ]},
+  Question2: {},
+  Question3: {}
+}
+
+
+
 codeTesting = "var nimi = \"jaakko\";\r\nvar ika = \"20\";\r\nvar ammatti =\"huoltomies\"\r\n\r\nalert(nimi);\r\nalert(ika);\r\nalert(ammatti);\r\n\r\n\r\n\r\n";
 
 requiredVariableNames = [{nimi: 1}, {ikä:1} ];
