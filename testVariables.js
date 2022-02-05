@@ -1,5 +1,16 @@
 // Viikko 2 Koodaustehtävä (6.2. klo 12:00 mennessä)
 //tässä jotain vikana
+taskOfStudent= {
+checkThese: { 
+  variables: [{name:"luvunArvaus", count: 1}, {name:"vertaa",count:1} ],
+  commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1} ]
+  //linecount: 20
+  },
+  name : {givenName: "testinimi", surname: "sukunimi"}, //for testing purposes
+  submission: "javascript code for inspection"
+};
+
+
 examVk2codingVariables = {
 Question1: { 
               variables: [{name:"luvunArvaus", count: 1}, {name:"vertaa",count:1} ],
@@ -143,7 +154,8 @@ module.exports = {
     forReportTest3: forReportTest3,
     requiredVariableNamesNew:requiredVariableNamesNew,
     requiredReservedWordsNew:requiredReservedWordsNew,
-    examVk2codingVariables: examVk2codingVariables
+    examVk2codingVariables: examVk2codingVariables,
+    taskOfStudent: taskOfStudent
 };
 
 bigtestforReport = [
