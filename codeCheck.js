@@ -25,7 +25,23 @@ var path = require('path');
 var filecount = 0;
 
 
-// First I want to read the file
+/**
+ * Reads file to array. This function is called only for "task" component downloaded assignments. in two occations. 
+ * 1. task description is given in "task" component and it is the same for all: checklist is typed manually
+ * 
+ * 2. Random tasks case: Task description is given by "Quiz", with instructions to keep or copy instructions and submit 
+ * the first part of the assignment in web text: checklist is extracted from CSV file downloaded from MOODLE. 
+ * To download it go to the quiz, "tarkastele tuloksia, " jossain siellä on mahdollisuus valita sekä kysymys että vastaus. 
+ * In this 2'nd scenario, actual coding tasks are still extracted from traditional "task", component in to the folder. 
+ * Answers need to be connected to correct checklist object. 
+ * From external module we will get checklist for individual student. 
+ * 
+ * @param {*} arr 
+ * @param {*} stringsToCheck 
+ * @param {*} tiedosto 
+ * @param {*} statCallback 
+ * @param {*} callback 
+ */
 function readFileToArray(arr, stringsToCheck, tiedosto, statCallback, callback) {
   console.log(tiedosto);
   fs.readFile(tiedosto, function read(err, data) {
