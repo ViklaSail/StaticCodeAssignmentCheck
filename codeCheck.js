@@ -12,7 +12,7 @@
 // https://www.npmjs.com/package/html-pdf
 
 var taskChecking = require('./taskCheck');
-
+var quizModule = require('./testVariables');
 var testFolder = './palautetut/';
 var fs = require('fs');
 const { JSHINT } = require('jshint');
@@ -23,8 +23,64 @@ var rivit = [];
 var fileErrors = [];
 var path = require('path');
 var filecount = 0;
+var quizObjectListGlobal;
+var readAllQuizzDataDone=false;
 
 
+function readAllQuizzData(scenario) {
+  if (scenario==3){ //for loop list through. call processSubmission
+    console.log("TODO scenario 3 QUIZ ALONE");
+    quizModule.getQuizSubmissions( (quizObjectList) => {
+      //TODO: here above-mentioned for-loop
+      console.log("content: ", quizObjectList); 
+    });
+  } else if (scenario==2){
+    console.log("TODO scenario 2 quiz + connected task, ASYNC");
+    quizModule.getQuizSubmissions( (quizObjectList) => {
+      quizObjectListGlobal = quizObjectList;
+      readAllQuizzDataDone = true;
+      console.log("content: ", quizObjectList); 
+    });
+  } else {
+    console.log("TODO: throw an error, this is not allowed");
+  }
+}
+
+function safetyTimeout(testi){
+  console.log("TIMEOUT TRIGGERED"+testi);
+}
+
+function readQuizData(name){
+  //TODO find record from quizObjectListGlobal with name
+  //{givenName: "testinimi", surname: "sukunimi"}
+  //readAllQuizzDataDone=false; TÄHÄN VAIKUTTAA TIMEOUT!!! 
+  foundItem = quizObjectListGlobal.find(function(forCheckingCode){
+    if(readAllQuizzDataDone) {
+      var givennameSame = forCheckingCode.name.givenName == name.givenName;
+      var surnameSame = forCheckingCode.name.surname == name.surname;
+      if (givennameSame && surnameSame){
+        return forCheckingCode; 
+      }
+    } else {
+      console.log("QUIZDATA NOT READ, ERROR");
+    }
+  });
+  return foundItem;
+
+}
+
+//* FUNCTION processSubmissionCallback(tiedostonimi, stringsToCheck)
+function processSubmissionCallback(tiedostonimi, stringsToCheck){
+  //tähän jääty
+}
+
+function parseName(filename){
+  var posUnderscore = filename.search("_");
+  var posSpace = filename.search(" ");
+  var givenname = filename.slice(0, posSpace);
+  var surname = filename.slice(posSpace+1, posUnderscore);
+  return  {givenName: givenname, surname: surname};
+}
 /**
  * Reads file to array. This function is called only for "task" component downloaded assignments. in two occations. 
  * 1. task description is given in "task" component and it is the same for all: checklist is typed manually
@@ -42,8 +98,8 @@ var filecount = 0;
  * @param {*} statCallback 
  * @param {*} callback 
  */
-function readFileToArray(arr, stringsToCheck, tiedosto, statCallback, callback) {
-  console.log(tiedosto);
+function readFileToArray(arr, stringsToCheck, tiedosto, statCallback) {
+  //console.log(tiedosto);
   fs.readFile(tiedosto, function read(err, data) {
     if (err) {
         throw err;
@@ -51,22 +107,23 @@ function readFileToArray(arr, stringsToCheck, tiedosto, statCallback, callback) 
     const content = data;
     arr = data;
     let tiedostoNimi = tiedosto.replace("./palautetut/", "");
-    processFile(tiedostoNimi, stringsToCheck, content, statCallback);   // Or put the next step in a function and invoke it
-    callback(arr);
+    processSubmission(tiedostoNimi, stringsToCheck, content, statCallback);   // Or put the next step in a function and invoke it
   });
   console.log("LOPPU READFILETOARRAY");
 }
 
 /**
- * ProcessFile: extract information of the file and write it to statisticsline for a file
+ * processSubmission: extract information of the file and write it to statisticsline for a file
  * @param {*} content 
  * @param {*} staCallBack 
  */
-function processFile(tiedostonimi, stringsToCheck, content, staCallBack) {
+function processSubmission(tiedostonimi, stringsToCheck, content, staCallBack) {
   let koodi = content.toString('utf-8');
   let errcount = 0;
   let errorList =[];
-  console.log(koodi);
+  var student = parseName(tiedostonimi);
+  var foundChecklist = readQuizData(student);
+  console.log(student + foundChecklist);
   //fileStatisticsCallback tänne parametrina ja sitä sitten kutsutaan joka kerta!!!!
   JSHINT(content.toString('utf-8'),{ undef: true, "node": true, "devel": true}); //"node": true
   lista.push(JSHINT.data()); //lisää tietorakenne tähän, lisäksi tiedoston nimi. 
@@ -111,23 +168,37 @@ function reduceErrors(list){
  * @param {*} statisticallback 
  * @param {*} callback 
  */
-function fillArray(arr, stringsToCheck, statisticallback, callback) {
-  const dirPath = path.join(__dirname, "./palautetut/");
-  fs.readdir(dirPath, function (err, files) {
-    if (err) {
-      return console.log("Unable to scan directory: " + err);
-    }
-    files.forEach(function (file) {
-        readFileToArray(rivit, stringsToCheck, "./palautetut/"+file, statisticallback, (content) => { //TÄMÄ KUTSU POIS TODO TÄSSÄ ONGELMAA. EIKÄ OLE
-            console.log("content: ", content);
-            console.log("callback" + filecount);
-        });
-        // vanha koodi jatkuu
-        arr.push(file);
+function readFileNames(scenario, filelist, stringsToCheck, statisticallback) {
+  var dirPath = path.join(__dirname, "./palautetut/");
+  if (scenario==1){
+    fs.readdir(dirPath, function (err, files) {
+      if (err) {
+        return console.log("Unable to scan directory: " + err);
+      }
+      files.forEach(function (file) {
+          // this forks to multiple async calls with shared statisticscallback. Where to call data_grab? 
+          readFileToArray(rivit, stringsToCheck, "./palautetut/"+file, statisticallback);
+          filelist.push(file);
+      });
     });
-    console.log("value ==> " + arr); // array is fill here
-    callback(arr);
-  });
+  } else if (scenario == 2) { //quiz-task-combo
+    //ASYNC readAllQuizzData(scenario = 2, )
+    readAllQuizzData(scenario);
+    fs.readdir(dirPath, function (err, files) {
+      if (err) {
+        return console.log("Unable to scan directory: " + err);
+      }
+      files.forEach(function (file) {
+          // this forks to multiple async calls with shared statisticscallback. Where to call data_grab? 
+          readFileToArray(rivit, stringsToCheck, "./palautetut/"+file, statisticallback);
+          filelist.push(file);
+      });
+    });
+
+  } else if (scenario == 3) { //quiz alone
+    console.log("TODO: scenario 3 handling")
+    readAllQuizzData(scenario);
+  }
 }
 
 //tässä lasketaan montako fileä on käsitelty. tämä välitetään parametrina ketjuun
@@ -144,19 +215,22 @@ function fileStatisticsCallback(submissionRecord){
   if (filecount>=tiedostoLkm) {
     console.log("kirjoitetaan analyysi-taulukko tiedostoon, tehdään raportti. ");
     taskChecking.prepareReport(studentSubmissionAnalysis);
-
   }
 }
 
 if (require.main === module) {
+  setTimeout(safetyTimeout, 1500, 'funky');
+  quizModule.getQuizSubmissions( (testi) => {
+    console.log("content: ", testi); 
+  });
   var taskDetailsToCheck = taskChecking.getTaskDetailsForChecking();
+  var scenario = 2; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
   console.log("luetaan tiedosto async");
   console.log("luotaan hakemiston tiedostonimet async callback");
-  fillArray(icon, taskDetailsToCheck, fileStatisticsCallback, (filelist) => {
-    console.log("content: ", filelist); 
-  });
+  readFileNames(scenario, icon, taskDetailsToCheck, fileStatisticsCallback);
 
 }
+
 
 /*
 KOMENTORIVILLÄ  jshint
