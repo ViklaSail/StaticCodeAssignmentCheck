@@ -28,7 +28,7 @@ function getTaskDetailsForChecking() {
 
 function checkRequiredReserwedWords(code, stringsToCheck){
   
-  var warningList = checkWords(code, PerformanceResourceTiming.requiredReservedWordsNew);
+  var warningList = checkWords(code, testing.requiredReservedWordsNew);
   warningList.type="ResevedWords";
   return warningList; // BE WARE this need to be a list
   //returns "alert: 3 should be 1";
@@ -50,7 +50,7 @@ function checkWords(code, wordlist) {
     var theRightCount = wordlist[i].count;
     var re = new RegExp(theWord, 'g');
     var keycount = (code.match(re) || []).length;
-    console.log(wordlist[i]);
+    //console.log(wordlist[i]);
     if(theRightCount!=keycount){
       variableReportObject.misscount++;
       variableReportObject.missDetails = variableReportObject.missDetails.concat(theWord, ": ", (keycount - theRightCount)+", ");

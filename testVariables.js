@@ -1,5 +1,19 @@
 // Viikko 2 Koodaustehtävä (6.2. klo 12:00 mennessä)
-//tässä jotain vikana
+function testGetQuizSubmissions(timeoutCallback){
+  var fakeCheckStructureList = [];
+  fakeCheckStructureList.push(taskOfStudent);
+  fakeCheckStructureList.push(taskOfStudent2);
+  fakeCheckStructureList.push(taskOfStudent3);
+  setTimeout(timeoutCallback, 13500, fakeCheckStructureList);
+}
+
+
+
+
+
+
+
+/**TESTING */
 taskOfStudent= {
 checkThese: { 
   variables: [{name:"luvunArvaus", count: 1}, {name:"vertaa",count:1} ],
@@ -10,6 +24,25 @@ checkThese: {
   submission: "javascript code for inspection"
 };
 
+taskOfStudent2= {
+  checkThese: { 
+    variables: [{name:"arvaaLuku", count: 1}, {name:"verrokki",count:1} ],
+    commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1} ]
+    //linecount: 20
+    },
+    name : {givenName: "testinimi2", surname: "sukunimi2"}, //for testing purposes
+    submission: "javascript code for inspection2222"
+  };
+
+taskOfStudent3= {
+  checkThese: { 
+    variables: [{name:"lukuLotto", count: 1}, {name:"pallo",count:1} ],
+    commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1} ]
+    //linecount: 20
+    },
+    name : {givenName: "testinimi3", surname: "sukunimi3"}, //for testing purposes
+    submission: "javascript code for inspection33333333"
+  };
 
 examVk2codingVariables = {
 Question1: { 
@@ -155,7 +188,8 @@ module.exports = {
     requiredVariableNamesNew:requiredVariableNamesNew,
     requiredReservedWordsNew:requiredReservedWordsNew,
     examVk2codingVariables: examVk2codingVariables,
-    taskOfStudent: taskOfStudent
+    taskOfStudent: taskOfStudent,
+    getQuizSubmissions: testGetQuizSubmissions
 };
 
 bigtestforReport = [
