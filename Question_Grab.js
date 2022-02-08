@@ -3,34 +3,33 @@
 const fs = require('fs');
 const csv = require('csv-parser');
 const csvpath = "./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv";
-var final_test = getPerson("Etunimi1", "Sukunimi1"); 
-function getPerson(first_name, last_name) {
+//var final_test = getPerson("Etunimi3", "Sukunimi3"); 
+function getPerson(first_name, last_name, callback) {
   fs.createReadStream(csvpath)
-      .on('error', error => console.error(error))
-      //.on('error', () => {
-          // handle error
-      //})
-      .pipe(csv())
-      .on('data', (row)  => {
-          var First_name = row["Etunimi"];
-          var email = row["Sähköpostiosoite"];
-          var question = row["Kysymys 1"];
-          var surname = remove_from_email(email);
-          var structure_array = find_structure(question);
-          var varbles_array = find_variables(question);
-          var variable_list = create_object_variables(varbles_array);
-          var structure_list = create_object_stucture(structure_array);
-          if ((first_name == First_name) && (surname= last_name)) {
+    .on('error', () => {
+        // handle error
+    })
+    .pipe(csv())
+    .on('data', (row)  => {
+        var First_name = row["Etunimi"];
+        var email = row["Sähköpostiosoite"];
+        var surname = remove_from_email(email);
+        if ((first_name == First_name) && (last_name == surname)){
+            var question = row["Kysymys 1"];
+            var structure_array = find_structure(question);
+            var varbles_array = find_variables(question);
+            var variable_list = create_object_variables(varbles_array);
+            var structure_list = create_object_stucture(structure_array);
             var person = {"Variables":variable_list, "Commands":structure_list};
-            //return person;
+          //var result = only_to_print(person);
+            callback(person);
+            //return result;
           }
-      })
-      .on('end', () => {
-        console.log(person);
-          // handle end of CSV
+        })   
+    .on('end', () => {
+        // handle end of CSV
     });
-
-  }
+}
 
 function find_structure(text_to_search) {
   var structure = text_to_search.split(']')[0];
@@ -93,6 +92,15 @@ function string_contains_number(st) {
 }
 }
 
+function only_to_print(x) {
+  console.log(x);
+  return x;
+}
 // Calling and Printing
-  
 //Example question start: Required Structures:[for(3), while, if] Required Variables:  [ARPAMUUTTUJA1, ARPAMUUTTUJA2(2)]     
+
+function callbackAsParameter(y){
+  console.log(y);
+}
+
+getPerson("Etunimi3", "Sukunimi3",callbackAsParameter); 
