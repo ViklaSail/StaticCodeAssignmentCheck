@@ -24,26 +24,42 @@ var fileErrors = [];
 var path = require('path');
 var filecount = 0;
 var quizObjectListGlobal;
-var readAllQuizzDataDone=false;
+var readAllQuizzDataDone=false; // used with scenario 1 and 2 at processSubmissionCallBack
+var submissionWaitList=[]; // because of callbacks and async operations. 
+var scenarioGlobal;
+var allQuizzData;
+var allQuizzCount=0;
 
+function getScenario1StringsToCheck(){
+  return quizModule.taskOfStudent;
+}
 
-function readAllQuizzData(scenario) {
+function readAllQuizzData(scenario, statisticallback) {
   if (scenario==3){ //for loop list through. call processSubmission
     console.log("TODO scenario 3 QUIZ ALONE");
-    quizModule.getQuizSubmissions( (quizObjectList) => {
-      //TODO: here above-mentioned for-loop
-      console.log("content: ", quizObjectList); 
+    allQuizzData = quizModule.getQuizSubmissions( (quizObjectList) => {
+      allQuizzCount=quizObjectList.length;
+      for(var i=0;i<quizObjectList.length;i++){
+        console.log("content: ", quizObjectList[i]);
+        //TODO: here above-mentioned for-loop
+        //processSubmission(tiedostoFromList, checksForStudentAtList, contentFromList, statCallback);
+
+        processSubmission(quizObjectList[i].name,"", quizObjectList[i].checkThese, quizObjectList[i].submission, statisticallback);
+      }
     });
   } else if (scenario==2){
     console.log("TODO scenario 2 quiz + connected task, ASYNC");
     quizModule.getQuizSubmissions( (quizObjectList) => {
+      // TODO: testhere need to make sure that processSubmissionCallback is called
       quizObjectListGlobal = quizObjectList;
       readAllQuizzDataDone = true;
+      processSubmissionCallback("submissionsDone","", statisticallback );
       console.log("content: ", quizObjectList); 
     });
   } else {
     console.log("TODO: throw an error, this is not allowed");
   }
+  console.log(allQuizzData);
 }
 
 function safetyTimeout(testi){
@@ -54,12 +70,16 @@ function readQuizData(name){
   //TODO find record from quizObjectListGlobal with name
   //{givenName: "testinimi", surname: "sukunimi"}
   //readAllQuizzDataDone=false; TÄHÄN VAIKUTTAA TIMEOUT!!! 
+  //TÄSSÄ ISOJA ONGELMIA. TODO TESAA LIVE-MATERIAALILLA. TESTIELSEEN THROW
   foundItem = quizObjectListGlobal.find(function(forCheckingCode){
     if(readAllQuizzDataDone) {
       var givennameSame = forCheckingCode.name.givenName == name.givenName;
       var surnameSame = forCheckingCode.name.surname == name.surname;
       if (givennameSame && surnameSame){
         return forCheckingCode; 
+      } else {
+        //for testing purposes. this is an error case, should throw an exception.
+        return forCheckingCode.name;
       }
     } else {
       console.log("QUIZDATA NOT READ, ERROR");
@@ -70,9 +90,36 @@ function readQuizData(name){
 }
 
 //* FUNCTION processSubmissionCallback(tiedostonimi, stringsToCheck)
-function processSubmissionCallback(tiedostonimi, stringsToCheck){
-  //tähän jääty
-}
+function processSubmissionCallback(tiedostoNimi,content,statCallback){
+  //Miten varmistetaan tämän funktion kutsu jos timeout kestää liian kauan!!!
+//  *  IF readAllQuizzDataDone not ready
+// name TODO tässä funktiossa potentiaalinen crash!!!
+  if(scenarioGlobal==1){
+    student = parseName(tiedostoNimi);
+    stringsToCheck = getScenario1StringsToCheck();
+    processSubmission(student, tiedostoNimi, stringsToCheck.checkThese, content, statCallback);
+  } else 
+  if(!readAllQuizzDataDone) { /**** */
+    submissionWaitList.push({"filename": tiedostoNimi, "content": content});
+  } else {
+    //CALL readQuizData for student
+    if (content){//if NOT coming from callback with nothing
+      var checksForStudent = readQuizData(parseName(tiedostoNimi));
+      //CALL processSubmission()
+      if(!tiedostoNimi)
+        console.log("error tiedostinomi empty");
+      var name = parseName(filename);
+      processSubmission(name, tiedostonimi, checksForStudent, content, statCallback);
+    }
+    for (let index = 0; index < submissionWaitList.length; ++index) {
+      var tiedostoFromList = submissionWaitList[index].filename;
+      var name = parseName(tiedostoFromList);
+      var contentFromList =  submissionWaitList[index].content;
+      var checksForStudentAtList = readQuizData(name); // TODO  this need to be done here or above
+      processSubmission(name, tiedostoFromList, checksForStudentAtList.checkThese, contentFromList, statCallback);
+    }
+  }
+ }
 
 function parseName(filename){
   var posUnderscore = filename.search("_");
@@ -92,22 +139,23 @@ function parseName(filename){
  * Answers need to be connected to correct checklist object. 
  * From external module we will get checklist for individual student. 
  * 
- * @param {*} arr 
+ * @param {*} filelist
  * @param {*} stringsToCheck 
  * @param {*} tiedosto 
  * @param {*} statCallback 
  * @param {*} callback 
  */
-function readFileToArray(arr, stringsToCheck, tiedosto, statCallback) {
+function readFileToArray(filelist, stringsToCheck, tiedosto, statCallback) {
   //console.log(tiedosto);
   fs.readFile(tiedosto, function read(err, data) {
     if (err) {
         throw err;
     }
     const content = data;
-    arr = data;
+    filelist = data;
     let tiedostoNimi = tiedosto.replace("./palautetut/", "");
-    processSubmission(tiedostoNimi, stringsToCheck, content, statCallback);   // Or put the next step in a function and invoke it
+    //processSubmission(tiedostoNimi, stringsToCheck, content, statCallback);   // Or put the next step in a function and invoke it
+    processSubmissionCallback(tiedostoNimi,content,statCallback);
   });
   console.log("LOPPU READFILETOARRAY");
 }
@@ -117,26 +165,27 @@ function readFileToArray(arr, stringsToCheck, tiedosto, statCallback) {
  * @param {*} content 
  * @param {*} staCallBack 
  */
-function processSubmission(tiedostonimi, stringsToCheck, content, staCallBack) {
+//function processSubmission(tiedostonimi, stringsToCheck, content, staCallBack) {
+function processSubmission(student, tiedostonimi, stringsToCheck, content, staCallBack) {
   let koodi = content.toString('utf-8');
   let errcount = 0;
   let errorList =[];
-  var student = parseName(tiedostonimi);
-  var foundChecklist = readQuizData(student);
-  console.log(student + foundChecklist);
+  //var foundChecklist = readQuizData(student);// TODO: make sure this returns right thing in scenario 1!!!! KORJAA Myös pseudo
+  //console.log(student + foundChecklist);
   //fileStatisticsCallback tänne parametrina ja sitä sitten kutsutaan joka kerta!!!!
   JSHINT(content.toString('utf-8'),{ undef: true, "node": true, "devel": true}); //"node": true
-  lista.push(JSHINT.data()); //lisää tietorakenne tähän, lisäksi tiedoston nimi. 
+  //lista.push(JSHINT.data()); //lisää tietorakenne tähän, lisäksi tiedoston nimi. 
   if(JSHINT.data().errors){
     errcount = JSHINT.data().errors.length;
     errorList = JSHINT.data().errors;
   }
   var errorObject = reduceErrors(errorList);
-  var commandWarnings = taskChecking.checkRequiredReserwedWords(koodi,stringsToCheck);
-  var variableWarnings = taskChecking.checkRequiredVariableNames(koodi,stringsToCheck);
+  var commandWarnings = taskChecking.checkRequiredReserwedWords(koodi,stringsToCheck);//TODO correct function to use actual stringsToCheck parameter
+  var variableWarnings = taskChecking.checkRequiredVariableNames(koodi,stringsToCheck);//TODO correct function to use actual stringsToCheck parameter
   console.log("icon " + icon.length);
   //staCallBack(tiedostonimi+" virheitä " + errcount + " ensimäinen virheteksti" + firsterror, commandWarnings, variableWarnings); 
   var submission = {};
+  submission.student = student;
   submission.file = tiedostonimi;
   submission.errors = errorObject;
   submission.commands = commandWarnings;
@@ -144,7 +193,7 @@ function processSubmission(tiedostonimi, stringsToCheck, content, staCallBack) {
   //staCallBack(tiedostonimi, errcount, reducedErrorList, commandWarnings, variableWarnings); 
   staCallBack(submission);
 }
-//**testi loppuu */
+
 function reduceErrors(list){
   var errorObject = {"errcount": list.length};
   var errline ="";
@@ -161,6 +210,23 @@ function reduceErrors(list){
   //return reducedErrorList;
 }
 
+//TODO not in pseudo
+function readDirectoryFileNames(scenario, filelist, stringsToCheck, statisticallback){
+  var dirPath = path.join(__dirname, "./palautetut/");
+  fs.readdir(dirPath, function (err, files) {
+    if (err) {
+      return console.log("Unable to scan directory: " + err);
+    }
+    files.forEach(function (file) {
+        // this forks to multiple async calls with shared statisticscallback. Where to call data_grab? 
+        // TODO remove rivit-parameter
+        readFileToArray(rivit, stringsToCheck, "./palautetut/"+file, statisticallback);
+        filelist.push(file);
+    });
+  });
+
+}
+
 /**
  * Skannaa hakemiston tiedostot ja kutsuu joka tiedostolle checkkiä
  * @param {*} arr 
@@ -169,35 +235,15 @@ function reduceErrors(list){
  * @param {*} callback 
  */
 function readFileNames(scenario, filelist, stringsToCheck, statisticallback) {
-  var dirPath = path.join(__dirname, "./palautetut/");
   if (scenario==1){
-    fs.readdir(dirPath, function (err, files) {
-      if (err) {
-        return console.log("Unable to scan directory: " + err);
-      }
-      files.forEach(function (file) {
-          // this forks to multiple async calls with shared statisticscallback. Where to call data_grab? 
-          readFileToArray(rivit, stringsToCheck, "./palautetut/"+file, statisticallback);
-          filelist.push(file);
-      });
-    });
+    readDirectoryFileNames(scenario, filelist, stringsToCheck, statisticallback);
   } else if (scenario == 2) { //quiz-task-combo
     //ASYNC readAllQuizzData(scenario = 2, )
-    readAllQuizzData(scenario);
-    fs.readdir(dirPath, function (err, files) {
-      if (err) {
-        return console.log("Unable to scan directory: " + err);
-      }
-      files.forEach(function (file) {
-          // this forks to multiple async calls with shared statisticscallback. Where to call data_grab? 
-          readFileToArray(rivit, stringsToCheck, "./palautetut/"+file, statisticallback);
-          filelist.push(file);
-      });
-    });
-
-  } else if (scenario == 3) { //quiz alone
+    readAllQuizzData(scenario,statisticallback);
+    readDirectoryFileNames(scenario, filelist, stringsToCheck, statisticallback);
+  } else if (scenario == 3) { //quiz alone no files
     console.log("TODO: scenario 3 handling")
-    readAllQuizzData(scenario);
+    readAllQuizzData(scenario,statisticallback);
   }
 }
 
@@ -211,6 +257,8 @@ function fileStatisticsCallback(submissionRecord){
   // kutsuttaessa lisää tilasto-arrayhyn tarvittavat tiedot (globaali array?). kun on kutsuttu yhtä monta kertaa kun on rivejä filenamelistassa
   //kirjoitetaan tilasto-array tiedostoon ja lähdetään. Tässä on ongelmana ainoastaan sen funktio-osoittimen tuominen tänne asti. 
   var tiedostoLkm = icon.length;
+  if (scenarioGlobal==3)
+    tiedostoLkm= allQuizzCount;
   studentSubmissionAnalysis.push(submissionRecord);
   if (filecount>=tiedostoLkm) {
     console.log("kirjoitetaan analyysi-taulukko tiedostoon, tehdään raportti. ");
@@ -219,18 +267,30 @@ function fileStatisticsCallback(submissionRecord){
 }
 
 if (require.main === module) {
-  setTimeout(safetyTimeout, 1500, 'funky');
+  //setTimeout(safetyTimeout, 1500, 'funky');
   quizModule.getQuizSubmissions( (testi) => {
     console.log("content: ", testi); 
   });
   var taskDetailsToCheck = taskChecking.getTaskDetailsForChecking();
   var scenario = 2; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
+  scenarioGlobal =scenario;
   console.log("luetaan tiedosto async");
   console.log("luotaan hakemiston tiedostonimet async callback");
   readFileNames(scenario, icon, taskDetailsToCheck, fileStatisticsCallback);
 
 }
-
+/**
+ * OHJEITA: SKENAARIOIDEN KÄSITTELY
+ * //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
+ * skenaario 1: pitää kirjoittaa käsin tarkastettavat objektit testvariables.js
+ * Skenaario 2: vaikka quiz otetaankin variables ja struktuurit, sen koodipalautusta ei tarkasteta tässä
+ * Jos haluaa tarkastaa ne, pitää suorittaa skenaario3 ajo erikseen
+ * Skenaario 3: tässä tarkastetaan quiz-palautettu tehtävä. 
+ * 
+ * KUINKA OTTAA MOODLESTA RAPORTTI: 
+ * Mene kysymykseen=>oikealla ylhäällä hammasratas=>tulokset-vastaukset: sieltä voi laittaa ruksin myös kysymykseen, 
+ * niin saa myös arvotut kyssärit tarkastettua. 
+ */
 
 /*
 KOMENTORIVILLÄ  jshint
