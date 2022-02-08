@@ -28,7 +28,8 @@ function getTaskDetailsForChecking() {
 
 function checkRequiredReserwedWords(code, stringsToCheck){
   
-  var warningList = checkWords(code, testing.requiredReservedWordsNew);
+  //var warningList = checkWords(code, testing.requiredReservedWordsNew);
+  var warningList = checkWords(code, stringsToCheck.commands);
   warningList.type="ResevedWords";
   return warningList; // BE WARE this need to be a list
   //returns "alert: 3 should be 1";
@@ -36,7 +37,8 @@ function checkRequiredReserwedWords(code, stringsToCheck){
 
 
 function checkRequiredVariableNames(code, stringsToCheck){
-  var warningList = checkWords(code, testing.requiredVariableNamesNew);
+  //var warningList = checkWords(code, testing.requiredVariableNamesNew);
+  var warningList = checkWords(code, stringsToCheck.variables);
   warningList.type="RequiredNames";
   return warningList; // BE WARE this need to be a list
   //return "nimi: 0 should be 1";
