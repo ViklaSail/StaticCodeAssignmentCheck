@@ -40,13 +40,16 @@
  * 
  * FUNCTION ASYNC readFileToArray
  *  ASYNC read file data of student
- *  When done call the processSubmission() 
+ *  OBSOLETE PSEUDO LINE: When done call the processSubmission() 
+ * 
+ *  When done call the processSubmissionCallback()
  * END FUNCTION 
  * 
  * FUNCTION CALLBACK handleStudentAssignmentCheck !!!!!!!
  * END FUNCTION 
  * 
- * FUNCTION processSubmissionCallback(tiedostonimi, stringsToCheck)
+ * //to be called when reading files between file reading and process submission
+ * FUNCTION processSubmissionCallback(tiedostonimi, stringsToCheck) 
  *  IF readAllQuizzDataDone not ready
  *      add file structure to submissionWaitList
  *  ELSE IF readAllQuizzDataDone ready

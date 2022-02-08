@@ -4,7 +4,7 @@ function testGetQuizSubmissions(timeoutCallback){
   fakeCheckStructureList.push(taskOfStudent);
   fakeCheckStructureList.push(taskOfStudent2);
   fakeCheckStructureList.push(taskOfStudent3);
-  setTimeout(timeoutCallback, 13500, fakeCheckStructureList);
+  setTimeout(timeoutCallback, 5500, fakeCheckStructureList);
 }
 
 
