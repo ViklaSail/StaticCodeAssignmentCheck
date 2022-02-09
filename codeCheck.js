@@ -12,7 +12,8 @@
 // https://www.npmjs.com/package/html-pdf
 
 var taskChecking = require('./taskCheck');
-var quizModule = require('./testVariables');
+//var quizModule = require('./testVariables');
+var quizModule = require('./quizModule');
 var testFolder = './palautetut/';
 var fs = require('fs');
 const { JSHINT } = require('jshint');
@@ -108,7 +109,7 @@ function processSubmissionCallback(tiedostoNimi,content,statCallback){
       //CALL processSubmission()
       if(!tiedostoNimi)
         console.log("error tiedostinomi empty");
-      var name = parseName(filename);
+      var name = parseName(tiedostoNimi);
       processSubmission(name, tiedostonimi, checksForStudent, content, statCallback);
     }
     for (let index = 0; index < submissionWaitList.length; ++index) {
@@ -308,39 +309,4 @@ Main funktio noden kanssa.
 https://stackoverflow.com/questions/4981891/node-js-equivalent-of-pythons-if-name-main
 
 https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop
-
-console jshint error
-add config {"node": true} in .jshint file
-https://github.com/victorporof/Sublime-JSHint/issues/131
-.jshintrc
-{
-   "node": true
-}
-
-*/
-
- /*
-fs.readdir(testFolder, (err, files) => {
-  files.forEach(file => {
-    console.log(file);
-    JSHINT(testFolder+file);
-    lista.push(JSHINT.data());
-  });
-});
-
-
-var source = [
-  'function goo() {}',
-  'foo = 3;'
-];
-var options = {
-  undef: true
-};
-var predef = {
-  foo: false
-};
-
-JSHINT(source, options, predef);
-
-console.log(JSHINT.data());
 */

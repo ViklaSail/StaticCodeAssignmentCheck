@@ -189,7 +189,9 @@ module.exports = {
     requiredReservedWordsNew:requiredReservedWordsNew,
     examVk2codingVariables: examVk2codingVariables,
     taskOfStudent: taskOfStudent,
-    getQuizSubmissions: testGetQuizSubmissions
+    getQuizSubmissions: testGetQuizSubmissions,
+    taskOfStudent2: taskOfStudent2,
+    taskOfStudent3: taskOfStudent3
 };
 
 bigtestforReport = [
