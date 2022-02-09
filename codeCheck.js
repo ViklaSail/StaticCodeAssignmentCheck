@@ -9,10 +9,14 @@
 // nimien erottaminen tiedostonnimistä
 // yhdistä collaboration checkeriin
 // raportointi
+//Jaa kaksi satunnaista lukua keskenään. Tulosta lopputulos. käytä lukujen generointiin Math-kirjaston (paketin) random-komentoa (e. funktiota). Tallenna satunnaiset luvut muuttujiin satuMuuttuja1 ja satuMuuttuja2.
+//Tee kertolasku kahdella satunnaisella luvulla. Tulosta lopputulos. käytä lukujen generointiin Math-kirjaston (paketin) random-komentoa (e. funktiota). Tallenna satunnaiset luvut muuttujiin lottoMuuttuja1 ja lottoMuuttuja2.
+//Vähennä kaksi satunnaista lukua toisistaan. Tulosta lopputulos. käytä lukujen generointiin Math-kirjaston (paketin) random-komentoa (e. funktiota). Tallenna satunnaiset luvut muuttujiin arpaMuuttuja1 ja arpaMuuttuja2.stringsToCheck
+//Laske yhteen kaksi satunnaista lukua. Tulosta lopputulos. käytä lukujen generointiin Math-kirjaston (paketin) random-komentoa (e. funktiota). Tallenna satunnaiset luvut muuttujiin randVar1 ja randVar2. Tallenna laskutoimituksen tulos muuttujaan randResult. Esittele/määrittele nämä muuttujat ennen käyttöä.
 // https://www.npmjs.com/package/html-pdf
 
 var taskChecking = require('./taskCheck');
-//var quizModule = require('./testVariables');
+var testModule = require('./testVariables');
 var quizModule = require('./quizModule');
 var testFolder = './palautetut/';
 var fs = require('fs');
@@ -32,7 +36,7 @@ var allQuizzData;
 var allQuizzCount=0;
 
 function getScenario1StringsToCheck(){
-  return quizModule.taskOfStudent;
+  return testModule.taskOfStudent; //TODO to do point to configuration file. 
 }
 
 function readAllQuizzData(scenario, statisticallback) {
@@ -273,12 +277,11 @@ if (require.main === module) {
     console.log("content: ", testi); 
   });
   var taskDetailsToCheck = taskChecking.getTaskDetailsForChecking();
-  var scenario = 2; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
+  var scenario = 3; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
   scenarioGlobal =scenario;
   console.log("luetaan tiedosto async");
   console.log("luotaan hakemiston tiedostonimet async callback");
   readFileNames(scenario, icon, taskDetailsToCheck, fileStatisticsCallback);
-
 }
 /**
  * OHJEITA: SKENAARIOIDEN KÄSITTELY
