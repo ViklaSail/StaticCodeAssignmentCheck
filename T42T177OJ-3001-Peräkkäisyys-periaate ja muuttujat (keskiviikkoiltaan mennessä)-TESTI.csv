@@ -1,0 +1,87 @@
+﻿Sukunimi,Etunimi,Sähköpostiosoite,Tila,Aloitettiin,Suoritettu,Suorituskerran kesto,"Arvosana/1,00",Kysymys 1,Vastaus 1
+Sukunimi1,Etunimi1,Etunimi1.Sukunimi1@edu.lapinamk.fi,Palautettu,21. tammikuuta 2022  14:21,25. tammikuuta 2022  05:10,3 päivää 14 tuntia,"0,00","Required Structures:[for(3), while, if] Required Variables:  [ARPAMUUTTUJA1, ARPAMUUTTUJA2(2)] VÄHENNÄ KAKSI SATUNNAISTA LUKUA TOISISTAAN. Tulosta lopputulos. käytä lukujen generointiin Math-kirjaston (paketin) random-komentoa (e. funktiota). Tallenna satunnaiset luvut muuttujiin ARPAMUUTTUJA1 ja ARPAMUUTTUJA2.
+
+Tallenna laskutoimituksen tulos muuttujaan ARPAEROTUS. Esittele/määrittele nämä muuttujat ennen käyttöä.
+
+Etsi tietoa googlella jos on tarpeen.
+
+HUOM: nimeä muuttujannimet täsmälleen niinkuin on kerrottu. Jos tarkistus ilmoittaa tehtävän vääräksi, yritä muutamia kertoja uudelleen. Sen jälkeen pyydä vertaistukea. Lopuksi ota yhteyttä opettajaan: ehkä tehtävän tarkastus ei toimi.
+
+HUOM: välilyönnit = merkin ympärille. Puolipiste (;) rivin loppuun , parametrien väliin tai esittelyjen väliin. pilkku ja puolipiste (,;) suoraan edellisen merkkijonon (sanan) yhteyteen.","setInterval(function(){
+    random = (Math.floor((Math.random()*15)+1));
+    var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+    random = random * plusOrMinus; 
+    currentnumber = document.getElementById('number');
+
+    document.getElementById('number').innerHTML =  parseInt(currentnumber.innerHTML) + random;
+
+ }, 1000);"
+Sukunimi2,Etunimi2,Etunimi2.Sukunimi2@edu.lapinamk.fi,Palautettu,21. tammikuuta 2022  19:59,21. tammikuuta 2022  20:06,7 min 9 sekuntia,"0,00","JAA KAKSI SATUNNAISTA LUKUA KESKENÄÄN. Tulosta lopputulos. käytä lukujen generointiin Math-kirjaston (paketin) random-komentoa (e. funktiota). Tallenna satunnaiset luvut muuttujiin SATUMUUTTUJA1 ja SATUMUUTTUJA2.
+
+Tallenna laskutoimituksen tulos muuttujaan SATUOSAM. Esittele/määrittele nämä muuttujat ennen käyttöä.
+
+Etsi tietoa googlella jos on tarpeen.
+
+HUOM: nimeä muuttujannimet täsmälleen niinkuin on kerrottu. Jos tarkistus ilmoittaa tehtävän vääräksi, yritä muutamia kertoja uudelleen. Sen jälkeen pyydä vertaistukea. Lopuksi ota yhteyttä opettajaan: ehkä tehtävän tarkastus ei toimi.
+
+HUOM: välilyönnit = merkin ympärille. Puolipiste (;) rivin loppuun , parametrien väliin tai esittelyjen väliin. pilkku ja puolipiste (,;) suoraan edellisen merkkijonon (sanan) yhteyteen.","let satuMuuttuja1  = Math.floor(Math.random() * 10);
+let satuMuuttuja2  = Math.floor(Math.random() * 10);
+
+satuOsam = satuMuuttuja1 / satuMuuttuja2 ;
+
+console.log(satuOsam)"
+Sukunimi2,Etunimi2,Etunimi2.Sukunimi2@edu.lapinamk.fi,Palautettu,21. tammikuuta 2022  20:07,21. tammikuuta 2022  20:08,46 sekuntia,"0,00","TEE KERTOLASKU KAHDELLA SATUNNAISELLA LUVULLA. Tulosta lopputulos. käytä lukujen generointiin Math-kirjaston (paketin) random-komentoa (e. funktiota). Tallenna satunnaiset luvut muuttujiin LOTTOMUUTTUJA1 ja LOTTOMUUTTUJA2.
+
+Tallenna laskutoimituksen tulos muuttujaan LOTTOEROTUS. Esittele/määrittele nämä muuttujat ennen käyttöä.
+
+Etsi tietoa googlella jos on tarpeen.
+
+HUOM: nimeä muuttujannimet täsmälleen niinkuin on kerrottu. Jos tarkistus ilmoittaa tehtävän vääräksi, yritä muutamia kertoja uudelleen. Sen jälkeen pyydä vertaistukea. Lopuksi ota yhteyttä opettajaan: ehkä tehtävän tarkastus ei toimi.
+
+HUOM: välilyönnit = merkin ympärille. Puolipiste (;) rivin loppuun , parametrien väliin tai esittelyjen väliin. pilkku ja puolipiste (,;) suoraan edellisen merkkijonon (sanan) yhteyteen.","let satuMuuttuja1  = Math.floor(Math.random() * 10);
+let satuMuuttuja2  = Math.floor(Math.random() * 10);
+
+satuOsam = satuMuuttuja1 / satuMuuttuja2 ;
+
+console.log(satuOsam);"
+Sukunimi3,Etunimi3,Etunimi3.Sukunimi3@edu.lapinamk.fi,Palautettu,24. tammikuuta 2022  13:08,24. tammikuuta 2022  13:17,8 min 43 sekuntia,"0,00","Required Structures:[for(1), while(3), elif(2), else(1)] Required Variables:  [LOTTOMUUTTUJA1(4) , LOTTOMUUTTUJA2(1)] TEE KERTOLASKU KAHDELLA SATUNNAISELLA LUVULLA. Tulosta lopputulos. käytä lukujen generointiin Math-kirjaston (paketin) random-komentoa (e. funktiota). Tallenna satunnaiset luvut muuttujiin LOTTOMUUTTUJA1 ja LOTTOMUUTTUJA2.
+
+Tallenna laskutoimituksen tulos muuttujaan LOTTOEROTUS. Esittele/määrittele nämä muuttujat ennen käyttöä.
+
+Etsi tietoa googlella jos on tarpeen.
+
+HUOM: nimeä muuttujannimet täsmälleen niinkuin on kerrottu. Jos tarkistus ilmoittaa tehtävän vääräksi, yritä muutamia kertoja uudelleen. Sen jälkeen pyydä vertaistukea. Lopuksi ota yhteyttä opettajaan: ehkä tehtävän tarkastus ei toimi.
+
+HUOM: välilyönnit = merkin ympärille. Puolipiste (;) rivin loppuun , parametrien väliin tai esittelyjen väliin. pilkku ja puolipiste (,;) suoraan edellisen merkkijonon (sanan) yhteyteen.","const lottoMuuttuja1 = Math.random();
+const lottoMuuttuja2 = Math.random();
+const lottoErotus = lottoMuuttuja1 * lottoMuuttuja2;
+console.log(lottoErotus);"
+Sukunimi4,Ulrika,Ulrika.Sukunimi4@edu.lapinamk.fi,Palautettu,25. tammikuuta 2022  09:05,25. tammikuuta 2022  09:11,6 min 36 sekuntia,"0,90","LASKE YHTEEN KAKSI SATUNNAISTA LUKUA. Tulosta lopputulos. käytä lukujen generointiin Math-kirjaston (paketin) random-komentoa (e. funktiota). Tallenna satunnaiset luvut muuttujiin RANDVAR1 ja RANDVAR2.
+
+Tallenna laskutoimituksen tulos muuttujaan RANDRESULT. Esittele/määrittele nämä muuttujat ennen käyttöä.
+
+Etsi tietoa googlella jos on tarpeen.
+
+HUOM: nimeä muuttujannimet täsmälleen niinkuin on kerrottu. Jos tarkistus ilmoittaa tehtävän vääräksi, yritä muutamia kertoja uudelleen. Sen jälkeen pyydä vertaistukea. Lopuksi ota yhteyttä opettajaan: ehkä tehtävän tarkastus ei toimi.
+
+HUOM: välilyönnit = merkin ympärille. Puolipiste (;) rivin loppuun , parametrien väliin tai esittelyjen väliin. pilkku ja puolipiste (,;) suoraan edellisen merkkijonon (sanan) yhteyteen.","var randVar1 = Math.random();
+var randVar2 = Math.random();
+var randResult = randVar1 + randVar2;
+console.log(randResult);"
+Sukunimi5,Etunimi,Etunimi.Sukunimi5@edu.lapinamk.fi,Palautettu,25. tammikuuta 2022  14:13,25. tammikuuta 2022  14:23,9 min 56 sekuntia,"0,00","VÄHENNÄ KAKSI SATUNNAISTA LUKUA TOISISTAAN. Tulosta lopputulos. käytä lukujen generointiin Math-kirjaston (paketin) random-komentoa (e. funktiota). Tallenna satunnaiset luvut muuttujiin ARPAMUUTTUJA1 ja ARPAMUUTTUJA2.
+
+Tallenna laskutoimituksen tulos muuttujaan ARPAEROTUS. Esittele/määrittele nämä muuttujat ennen käyttöä.
+
+Etsi tietoa googlella jos on tarpeen.
+
+HUOM: nimeä muuttujannimet täsmälleen niinkuin on kerrottu. Jos tarkistus ilmoittaa tehtävän vääräksi, yritä muutamia kertoja uudelleen. Sen jälkeen pyydä vertaistukea. Lopuksi ota yhteyttä opettajaan: ehkä tehtävän tarkastus ei toimi.
+
+HUOM: välilyönnit = merkin ympärille. Puolipiste (;) rivin loppuun , parametrien väliin tai esittelyjen väliin. pilkku ja puolipiste (,;) suoraan edellisen merkkijonon (sanan) yhteyteen.","let arpaMuuttuja1, arpaMuuttuja2, arpaErotus;
+
+arpaMuuttuja1 = Math.random();
+arpaMuuttuja2 = Math.random();
+arpaErotus = arpaMuuttuja1 - arpaMuuttuja2;
+
+console.log(arpaMuuttuja1);
+console.log(arpaMuuttuja2);
+console.log(arpaErotus);"
