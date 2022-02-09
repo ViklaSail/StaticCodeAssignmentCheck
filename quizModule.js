@@ -3,6 +3,7 @@
  * 
  */
 
+const { getQuizSubmissions } = require('./testVariables');
 var fake = require('./testVariables');
 const fs = require('fs');
 const csv = require('csv-parser');
