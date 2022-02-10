@@ -144,7 +144,9 @@ module.exports = {
  * 
  * 1. All required reserved words/structures and variables are written in ALL CAPITALS. 
  * In task submission those can be in lower case. Reserved words are detected automatically, 
- * Rest of the detected words are function- names and variable names
+ * Rest of the detected words are function- names and variable names. Note: bolded words 
+ * transfer to all capital letter-words when exporting csv file from Moodle. 
+ * ;;; seems to be carriage-return-newline
  * 
  * 2. specific structure using brackes by Andreas
  * 
@@ -158,5 +160,17 @@ module.exports = {
  * method used to write required words and then use that method systematically to whole run???
  * 
  * Error handling: add to object "errors" object where you put error description as a value. 
+ * 
+ * TODO: quiz anonymisation script
+ * Reads file with real name - fake name pairs
+ * Looks for real names and replaces those with fake names in file 
+ * Rewrites @edu.lapinamk.fi with @student.uni.com
+ * 
+ * Discussion points with Andreas, latest findings
+ * bold->capital,new-line ;;;
+ * 
+ *  first three lines vs capital serch word finding. 
+ * find all uppercase words.
+ * https://www.techighness.com/post/how-to-get-all-uppercase-words-from-a-string-in-javascript/
  * 
  */

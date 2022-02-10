@@ -88,4 +88,47 @@
  *  //setTimeout(function, milliseconds)
  *  set related global variables and call relevant functions to gracefully exit.
  * ENDFUNCTION
+ * 
+ * 
+ * Raportin muokkaaminen
+ * JAA KAKSI SATUNNAISTA LUKUA KESKENÄÄN
+Jaa kaksi satunnaista lukua keskenään- Muistilista:
+;;;
+Nimet: satuMuuttuja1 satuMuuttuja2 satuOsam
+;;;
+Koodi: var, math.random, console.log
+;;;
+ * 
+Tee kertolasku kahdella satunnaisella luvulla - Muistilista:
+;;;
+Nimet: lottoMuuttuja1 ja lottoMuuttuja2 lottoErotus
+;;;
+Koodi: var, math.random, console.log
+;;;
+
+Vähennä kaksi satunnaista lukua toisistaan - Muistilista:
+;;;
+Nimet: arpaMuuttuja1, arpaMuuttuja2, arpaErotus
+;;;
+Koodi: var, math.random, console.log
+;;;
+ * 
+Laske yhteen kaksi satunnaista lukua - Muistilista:
+;;;
+Nimet: randVar1, randVar2, randResult
+;;;
+Koodi: var, math.random, console.log
+;;;
+ * 
+
+ RAKENNETAAN ETSI-KORVAA MERKKIJONOT
+ ;;; - tämä on entterin painallus
+ Lihavoidut merkkijonot muuttuvat CAPITAL case kamaksi. 
+
+
+ https://stackoverflow.com/questions/30351529/find-and-replace-with-a-newline-in-visual-studio-code
+ 
+In the local searchbox (ctrl + f) you can insert newlines by pressing ctrl + enter.
+
+ 
  */
