@@ -102,7 +102,7 @@ function processSubmissionCallback(tiedostoNimi,content,statCallback){
   if(scenarioGlobal==1){
     student = parseName(tiedostoNimi);
     stringsToCheck = getScenario1StringsToCheck();
-    processSubmission(student, tiedostoNimi, stringsToCheck.checkThese, content, statCallback);
+    processSubmission(student, tiedostoNimi, stringsToCheck.checkThese, content.toString('utf-8'), statCallback);
   } else 
   if(!readAllQuizzDataDone) { /**** */
     submissionWaitList.push({"filename": tiedostoNimi, "content": content});
@@ -172,7 +172,7 @@ function readFileToArray(filelist, stringsToCheck, tiedosto, statCallback) {
  */
 //function processSubmission(tiedostonimi, stringsToCheck, content, staCallBack) {
 function processSubmission(student, tiedostonimi, stringsToCheck, content, staCallBack) {
-  let koodi = content.toString('utf-8');
+  let koodi = content;//content.toString('utf-8');
   let errcount = 0;
   let errorList =[];
   //var foundChecklist = readQuizData(student);// TODO: make sure this returns right thing in scenario 1!!!! KORJAA Myös pseudo
@@ -277,7 +277,7 @@ if (require.main === module) {
     console.log("content: ", testi); 
   });
   var taskDetailsToCheck = taskChecking.getTaskDetailsForChecking();
-  var scenario = 3; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
+  var scenario = 1; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
   scenarioGlobal =scenario;
   console.log("luetaan tiedosto async");
   console.log("luotaan hakemiston tiedostonimet async callback");

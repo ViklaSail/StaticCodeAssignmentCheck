@@ -61,10 +61,13 @@ function get_all_Students(callback) {
             value: 0
           };
         }
-        var checkThese = {"variables":variable_list, "commands":structure_list};
-        var name = {"givenName":First_name, "surname":surname};
-        var submission = {"submission":answer};
-        var taskOfStudents = {checkThese, name, submission};
+        //var checkThese = {"variables":variable_list, "commands":structure_list};
+        //var name = {"givenName":First_name, "surname":surname};
+        //var submission = {"submission":answer};
+        var taskOfStudents = {};//{checkThese, name, submission};
+        taskOfStudents.name = {"givenName":First_name, "surname":surname};
+        taskOfStudents.checkThese = {"variables":variable_list, "commands":structure_list};
+        taskOfStudents.submission=answer;
         listOfQuizAnswers.push(taskOfStudents);
     })
     .on('end', (testi) => {
