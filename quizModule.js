@@ -2,6 +2,16 @@
  * Quiz/exam related functions and system level mocking functions. 
  * 
  */
+/*
+ checkThese: { 
+  variables: [{name:"luvunArvaus", count: 1}, {name:"vertaa",count:1} ],
+  commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1} ]
+  //linecount: 20
+  },
+  name : {givenName: "testinimi", surname: "sukunimi"}, //for testing purposes
+  submission: "javascript code for inspection"
+};
+*/
 
 const { getQuizSubmissions } = require('./testVariables');
 var fake = require('./testVariables');
@@ -51,7 +61,7 @@ function get_all_Students(callback) {
             value: 0
           };
         }
-        var checkThese = {"Variables":variable_list, "Commands":structure_list};
+        var checkThese = {"variables":variable_list, "commands":structure_list};
         var name = {"givenName":First_name, "surname":surname};
         var submission = {"submission":answer};
         var taskOfStudents = {checkThese, name, submission};
@@ -165,8 +175,6 @@ module.exports = {
  * 
  * Error handling: add to object "errors" object where you put error description as a value. 
  * 
- * TODO: quiz anonymisation script
- * Reads file with real name - fake name pairs
  * Looks for real names and replaces those with fake names in file 
  * Rewrites @edu.lapinamk.fi with @student.uni.com
  * 
@@ -177,4 +185,15 @@ module.exports = {
  * find all uppercase words.
  * https://www.techighness.com/post/how-to-get-all-uppercase-words-from-a-string-in-javascript/
  * 
+ */
+
+/**
+ * TASK LIST
+ * TODO: quiz anonymisation script
+ * Reads file with real name - fake name pairs
+ * 
+ * TODO: dublicate stripping: older submissions of the same person removed. 
+ * 
+ * TODO: Plan and implement configuration file: 
+ * List every fixed file or string in these source code files. Find out also purpose
  */
