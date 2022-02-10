@@ -10,7 +10,7 @@ const csv = require('csv-parser');
 const csvpath = "./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv";
 var variable_list= [];
 var structure_list = [];
-
+var listOfQuizAnswers = [];
 function testGetQuizSubmissions(timeoutCallback){//test function simulating long lasting async
     var fakeCheckStructureList = [];
     fakeCheckStructureList.push(fake.taskOfStudent);
@@ -55,10 +55,12 @@ function get_all_Students(callback) {
         var name = {"givenName":First_name, "surname":surname};
         var submission = {"submission":answer};
         var taskOfStudents = {checkThese, name, submission};
-        callback(taskOfStudents);
+        listOfQuizAnswers.push(taskOfStudents);
     })
-    .on('end', () => {
-        // handle end of CSV
+    .on('end', (testi) => {
+        console.log(testi);
+        console.log("KAIKKI VALMISTA!!!!");
+        callback(listOfQuizAnswers);
   });
 
 }
@@ -135,7 +137,9 @@ function callbackAsParameter(y){
  
 module.exports = {
     goo: "googoo",
-    getQuizSubmissions: testGetQuizSubmissions
+    //getQuizSubmissions: testGetQuizSubmissions
+    getQuizSubmissions: get_all_Students
+    
 };
 
 /**
