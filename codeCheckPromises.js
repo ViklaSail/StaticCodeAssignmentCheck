@@ -89,6 +89,20 @@
  *  set related global variables and call relevant functions to gracefully exit.
  * ENDFUNCTION
  * 
+ * ** COURSE COORDINATION PART PSEUDO
+ * FUNCTION updateCourseConfigurations
+ *  update or create following assignment structures
+ *      taskFolder
+ *      quizFilename
+ *      reportingLevel
+ * 
+ * FUNCTION runAssignmentCheck
+ *  IF taskFolder AND quizFilename
+ *      set scenario 2
+ *      run 
+ * 
+ * 
+ * 
  * 
  * Raportin muokkaaminen
  * JAA KAKSI SATUNNAISTA LUKUA KESKENÄÄN

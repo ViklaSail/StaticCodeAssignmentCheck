@@ -199,4 +199,12 @@ module.exports = {
  * 
  * TODO: Plan and implement configuration file: 
  * List every fixed file or string in these source code files. Find out also purpose
+ * 
+ * TODO: Course-level configuration and report management: 
+ * root directory under which there are task directories and quiz.csv files
+ * task and quiz name- recording and handling, day level. 
+ * Course status report running: studen/task level intervention plan by report results.
+ * 
+ * TODO: UI for all this. 
+ * 
  */
