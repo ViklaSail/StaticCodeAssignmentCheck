@@ -89,19 +89,42 @@
  *  set related global variables and call relevant functions to gracefully exit.
  * ENDFUNCTION
  * 
- * ** COURSE COORDINATION PART PSEUDO
- * FUNCTION updateCourseConfigurations
+ * ** COURSE COORDINATION PART PSEUDO **
+ * FUNCTION createInitCourseConfigurations
  *  update or create following assignment structures
  *      taskFolder
  *      quizFilename
- *      reportingLevel
+ *      reportingLevel = 1
+ *      scenario
+ *      codeLength = 4
+ *  IF taskfolder has value 
+ *      set scenario = 1
+ *  else set scenario 3
  * 
- * FUNCTION runAssignmentCheck
+ * FUNCTION initStructures
+ *  read course root folder contents
+ *  create initial assignment structure
+ *      CALL createInitCourseConfigurations
+ *  save assignment structure to file
+ * END FUNCTION
+ * 
+ * FUNCTION runAssignmentCheck(assignment)
  *  IF taskFolder AND quizFilename
  *      set scenario 2
- *      run 
+ *  IF taskFolder AND NOT quizFileName
+ *      set scenario 1
+ *  IF NOT taskFolder AND guizFileName
+ *      set scenario 3
+ *  run codeCheck with record
+ * END FUNCTION
  * 
+ * FUNCTION configureAssignments
+ *  show UI for teacher
+ *  Allow teacher to connect quiz 
+ *      with task for random 
+ *      assignment evaluation
  * 
+ * END FUNCTION
  * 
  * 
  * Raportin muokkaaminen
