@@ -86,8 +86,8 @@ function checkWords(code, wordlist) {
     for (var file = 0; file < multiLevelTableForReport.length;file++){
       if (reportLevel==0 && multiLevelTableForReport[file].errors.errcount>0)
         var rep = multiLevelTableForReport[file];
-        console.log("on erroreita")
-        defectiveAssignment.push(rep.);
+        console.log("on erroreita");
+        //defectiveAssignment.push(rep.);
       // errors line "no-errors" or n errors, list follows:
       // All required words present / Required reserved words missing, list follows
       // All required names present / required names missing, list follows:

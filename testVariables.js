@@ -7,7 +7,14 @@ function testGetQuizSubmissions(timeoutCallback){
   setTimeout(timeoutCallback, 5500, fakeCheckStructureList);
 }
 
-
+commonCheckStruct = {checkThese: { 
+  variables: [{name:"", count: 0} ],
+  commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1} ],
+  codeLength: 5
+  },
+  name : {givenName: "testinimi", surname: "sukunimi"}, //for testing purposes
+  submission: "javascript code for inspection"
+};
 
 
 
@@ -191,6 +198,7 @@ module.exports = {
     taskOfStudent: taskOfStudent,
     getQuizSubmissions: testGetQuizSubmissions,
     taskOfStudent2: taskOfStudent2,
-    taskOfStudent3: taskOfStudent3
+    taskOfStudent3: taskOfStudent3,
+    commonCheckStruct: commonCheckStruct
 };
 

@@ -21,6 +21,7 @@ const csvpath = "./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskivii
 var variable_list= [];
 var structure_list = [];
 var listOfQuizAnswers = [];
+
 function testGetQuizSubmissions(timeoutCallback){//test function simulating long lasting async
     var fakeCheckStructureList = [];
     fakeCheckStructureList.push(fake.taskOfStudent);

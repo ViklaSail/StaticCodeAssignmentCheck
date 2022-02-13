@@ -69,37 +69,66 @@ function allFilesRead(){
 
 }
 
-function writeConfigurations() {
+function writeConfigurations(readyToStartCourceCheck) {
+    var jsonContent = JSON.stringify(initialAssignmentConfigurations);
+    fs.writeFile("./alphabet.json", jsonContent, 'utf8', function (err) {
+        if (err) {
+            return console.log(err);
+        }
+    
+        console.log("The file was saved!");
+        readyToStartCourceCheck();
+    }); 
     
 }
 
+function readconfFile(readyToStartCourceCheck) {
+    fs.readFile('./alphabet.json', 'utf8', (err, jsonString) => {
+        if (err) {
+            console.log("File read failed:", err)
+            return console.log(err);
+        }
+        console.log('File data:', jsonString);
+        var test = JSON.parse(jsonString); 
+        console.table(test);
+        readyToStartCourceCheck();
+    });
+}
+
+function getConfData() {
+    var confDone = fs.existsSync("\alphabet.json");
+    if (!confDone){
+        readDirectoryFileNames(readyToStartCourceCheck); 
+    }
+    else{
+        readconfFile(readyToStartCourceCheck);
+    }
+}
 //https://nodejs.dev/learn/working-with-folders-in-nodejs
 
-  function writeSettings(settings, startBigLoop){
-    //const jsonString = JSON.stringify(customer)
-    //console.log(jsonString) 
-    var success = false;
-    const customer = settings;
-/*    {
-        name: "Newbie Co.",
-        order_count: 0,
-        address: "Po Box City",
-    };*/
-    const jsonString = JSON.stringify(customer)
-    fs.writeFile('./newCustomer.json', jsonString, err => {
-        if (err) {
-            console.log('Error writing file', err);
-        } else {
-            console.log('Successfully wrote file');
-            success = true;
-            startBigLoop();
-        }
-    });
-    return success;
+function readyToStartCourceCheck(){
+    console.log("looping through files");
+    //need to check that all get done in good order, callbacks will cause problems with global variables
+    //wait-function? 
+    //reports attached to copy of course check? ensin vain yksi
 }
 
 if (require.main === module) {
-    readDirectoryFileNames();
+    getConfData();
+/*    var confDone = fs.existsSync("\alphabet.json");
+    if (!confDone){
+        readDirectoryFileNames(); 
+    }
+    else{
+        readconfFile();
+        console.log("Ajetaan kurssianalyysi");
+        // with common log for tasks
+        //codeCheck.codeCheckMain()
+    }
+*/
+
+    //C:\Users\veper\Documents\SOFTAUS\StaticCodeAssignmentCheck\alphabet.json
+        
 /*    var settings = '{"name":"John", "age":30, "car":null}';
     var res = writeSettings(settings, ()=>{
         console.log("start big loop");

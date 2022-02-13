@@ -114,7 +114,7 @@ function processSubmissionCallback(tiedostoNimi,content,statCallback){
       if(!tiedostoNimi)
         console.log("error tiedostinomi empty");
       var name = parseName(tiedostoNimi);
-      processSubmission(name, tiedostonimi, checksForStudent, content, statCallback);
+      processSubmission(name, tiedostoNimi, checksForStudent.checkThese, content.toString('utf-8'), statCallback);
     }
     for (let index = 0; index < submissionWaitList.length; ++index) {
       var tiedostoFromList = submissionWaitList[index].filename;
@@ -225,7 +225,7 @@ function readDirectoryFileNames(scenario, filelist, stringsToCheck, statisticall
     files.forEach(function (file) {
         // this forks to multiple async calls with shared statisticscallback. Where to call data_grab? 
         // TODO remove rivit-parameter
-        readFileToArray(rivit, stringsToCheck, "./palautetut/"+file, statisticallback);
+        readFileToArray(filelist, stringsToCheck, "./palautetut/"+file, statisticallback);
         filelist.push(file);
     });
   });
@@ -271,13 +271,26 @@ function fileStatisticsCallback(submissionRecord){
   }
 }
 
+/**
+ * 13.2.22 Before starting to implement this function, all scenarios run and corrections made.
+ * Not crashing, report gets an analysis array to process. 
+ * 
+ * CourseRun calls. in erorneous situation check by running this file alone
+ * with current test setup in require.main with all scenarious one by one
+ * That setup should be stable and is a sanity check. 
+ */
+function codeCheckMain(){
+  console.log("starting file and folder operations, one by one");
+  
+}
+
 if (require.main === module) {
   //setTimeout(safetyTimeout, 1500, 'funky');
   quizModule.getQuizSubmissions( (testi) => {
     console.log("content: ", testi); 
   });
   var taskDetailsToCheck = taskChecking.getTaskDetailsForChecking();
-  var scenario = 1; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
+  var scenario = 2; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
   scenarioGlobal =scenario;
   console.log("luetaan tiedosto async");
   console.log("luotaan hakemiston tiedostonimet async callback");
@@ -313,3 +326,8 @@ https://stackoverflow.com/questions/4981891/node-js-equivalent-of-pythons-if-nam
 
 https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop
 */
+
+// do not change this
+module.exports = {
+  codeCheckMain: codeCheckMain
+};

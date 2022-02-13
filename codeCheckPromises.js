@@ -89,7 +89,7 @@
  *  set related global variables and call relevant functions to gracefully exit.
  * ENDFUNCTION
  * 
- * ** COURSE COORDINATION PART PSEUDO **
+ * ***** COURSE COORDINATION PART PSEUDO ***********************
  * FUNCTION createInitCourseConfigurations
  *  update or create following assignment structures
  *      taskFolder
@@ -108,14 +108,8 @@
  *  save assignment structure to file
  * END FUNCTION
  * 
- * FUNCTION runAssignmentCheck(assignment)
- *  IF taskFolder AND quizFilename
- *      set scenario 2
- *  IF taskFolder AND NOT quizFileName
- *      set scenario 1
- *  IF NOT taskFolder AND guizFileName
- *      set scenario 3
- *  run codeCheck with record
+ * FUNCTION codeCheckMain()
+ *  
  * END FUNCTION
  * 
  * FUNCTION configureAssignments
