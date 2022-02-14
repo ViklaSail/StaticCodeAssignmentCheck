@@ -21,6 +21,7 @@ const csvpath = "./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskivii
 var variable_list= [];
 var structure_list = [];
 var listOfQuizAnswers = [];
+var allTaskCheckWords = []; //
 
 function testGetQuizSubmissions(timeoutCallback){//test function simulating long lasting async
     var fakeCheckStructureList = [];
@@ -30,8 +31,37 @@ function testGetQuizSubmissions(timeoutCallback){//test function simulating long
     setTimeout(timeoutCallback, 5500, fakeCheckStructureList);
 }
 
-function get_all_Students(callback) {
+function testGetTaskCheckParameters(taskName){
+  if (allTaskCheckWords.length == 0) {
+    readAllTaskChecks();
+  }
+  console.log(allTaskCheckWords);
+  //array.find(function(element, index, array),thisValue)
+  
+  var found = allTaskCheckWords.find(function(element) {
+    if(element.taskFolder==taskName){
+      console.log(taskName);
+      return true;
+    }
+    console.log(element);
+  });
+  console.log(found);
+  if(!found){//return basic empty
+    found = fake.commonCheckStruct;
+  }
+  return found;
+}
 
+/**
+ * faking. TODO actual file reading
+ */
+function readAllTaskChecks(){
+  //allTaskCheckWords.push(fake.taskOfStudent2);
+  //allTaskCheckWords.push(fake.taskOfStudent3);
+  allTaskCheckWords=fake.taskCheckStructs;
+}
+
+function get_all_Students(callback) {
   fs.createReadStream(csvpath)
     .on('error', () => {
         // handle error
@@ -148,11 +178,19 @@ function only_to_print(x) {
 function callbackAsParameter(y){
   console.log(y);
 }
- 
+
+if (require.main === module) {
+  // testGetTaskCheckParameters("T42T177OJ-3001-JavaScript perusteet OSA 10 - IF lause 2606-665951");
+  testGetTaskCheckParameters("T");
+}
+
+
 module.exports = {
     goo: "googoo",
     //getQuizSubmissions: testGetQuizSubmissions
-    getQuizSubmissions: get_all_Students
+    getQuizSubmissions: get_all_Students, 
+    GetTaskCheckParameters: testGetTaskCheckParameters
+    
     
 };
 

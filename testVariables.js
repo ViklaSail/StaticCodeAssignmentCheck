@@ -16,10 +16,6 @@ commonCheckStruct = {checkThese: {
   submission: "javascript code for inspection"
 };
 
-
-
-
-
 /**TESTING */
 taskOfStudent= {
 checkThese: { 
@@ -82,6 +78,19 @@ reservedReport = ["nimi: 0 should be 1", "ikä: 0 should be 1","ohje: 0 should b
 //function checkRequiredVariableNames(code){
 variableReport = ["alert: 0 should be 1", "for: 0 should be 1","if: 0 should be 1","var: 0 should be 1"];
 
+taskCheckStructs = [
+  {
+      "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 10 - IF lause 2606-665951",
+      "taskCheck": taskOfStudent3
+  },
+  {
+      "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 11 - Toistorakenteet-666410",
+      "taskCheck": taskOfStudent2
+  },
+  {
+      "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 13 - Tietotyypit, const, var, let-667936",
+      "taskcheck": taskOfStudent
+  }]
 
 forReportTest3 = [
     [
@@ -199,6 +208,6 @@ module.exports = {
     getQuizSubmissions: testGetQuizSubmissions,
     taskOfStudent2: taskOfStudent2,
     taskOfStudent3: taskOfStudent3,
-    commonCheckStruct: commonCheckStruct
+    commonCheckStruct: commonCheckStruct,
+    taskCheckStructs: taskCheckStructs
 };
-

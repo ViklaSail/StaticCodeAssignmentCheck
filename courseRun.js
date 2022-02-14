@@ -6,6 +6,7 @@ var count;
 var rootfilelist =[];
 var taskFolderList = [];
 var initialAssignmentConfigurations = [];
+var codeChecker = require('./codeCheck');
 //const config = require('./config.json')
 
 //var rootdirectory = "file:///D:/TESTIMATERIAALIA/";
@@ -88,9 +89,8 @@ function readconfFile(readyToStartCourceCheck) {
             console.log("File read failed:", err)
             return console.log(err);
         }
-        console.log('File data:', jsonString);
-        var test = JSON.parse(jsonString); 
-        console.table(test);
+        initialAssignmentConfigurations =  JSON.parse(jsonString); 
+        console.table(initialAssignmentConfigurations);
         readyToStartCourceCheck();
     });
 }
@@ -111,6 +111,8 @@ function readyToStartCourceCheck(){
     //need to check that all get done in good order, callbacks will cause problems with global variables
     //wait-function? 
     //reports attached to copy of course check? ensin vain yksi
+    codeChecker.codeCheckMain(initialAssignmentConfigurations[0]);
+
 }
 
 if (require.main === module) {

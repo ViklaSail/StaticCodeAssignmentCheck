@@ -275,13 +275,18 @@ function fileStatisticsCallback(submissionRecord){
  * 13.2.22 Before starting to implement this function, all scenarios run and corrections made.
  * Not crashing, report gets an analysis array to process. 
  * 
- * CourseRun calls. in erorneous situation check by running this file alone
+ * CourseRun calls. in errorneous situation check by running this file alone
  * with current test setup in require.main with all scenarious one by one
  * That setup should be stable and is a sanity check. 
+ * 
+ * 1. single run for one record = general feasibility
+ * 2. single run for 3 records
  */
-function codeCheckMain(){
+function codeCheckMain(submission){
   console.log("starting file and folder operations, one by one");
-  
+  var taskDetailsToCheck = quizModule.GetTaskCheckParameters(submission.taskFolder);
+  console.log(submission + taskDetailsToCheck);
+  readFileNames(submission.scenario, icon, taskDetailsToCheck, fileStatisticsCallback);
 }
 
 if (require.main === module) {
