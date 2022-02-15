@@ -5,17 +5,17 @@ const csv = require('csv-parser');
 const csvpath = "./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv";
 var variable_list= [];
 var structure_list = [];
-//var final_test = getPerson("Etunimi3", "Sukunimi3"); 
-function get_all_Students(callback) {
 
+function get_all_Students(callback) {
   fs.createReadStream(csvpath)
     .on('error', () => {
         // handle error
     })
     .pipe(csv())
     .on('data', (row)  => {
-        var First_name = row["Etunimi"];
         var email = row["Sähköpostiosoite"];
+        var timestamp = row["Suoritettu"];
+        var First_name = row["Etunimi"];
         var surname = remove_from_email(email);
         var question = row["Kysymys 1"];
         var answer = row["Vastaus 1"];
@@ -38,10 +38,11 @@ function get_all_Students(callback) {
             value: 0
           };
         }
+        var end_time = {"Ended at":timestamp};
         var checkThese = {"Variables":variable_list, "Commands":structure_list};
         var name = {"givenName":First_name, "surname":surname};
         var submission = {"submission":answer};
-        var taskOfStudents = {checkThese, name, submission};
+        var taskOfStudents = {checkThese, name, submission, end_time};
         callback(taskOfStudents);
     })
     .on('end', () => {
@@ -109,10 +110,7 @@ function string_contains_number(st) {
 }
 }
 
-function only_to_print(x) {
-  console.log(x);
-  return x;
-}
+
 // Calling and Printing
 //Example question start: Required Structures:[for(3), while, if] Required Variables:  [ARPAMUUTTUJA1, ARPAMUUTTUJA2(2)]     
 
