@@ -1,0 +1,170 @@
+[
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 10 - IF lause 2606-665951",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 11 - Toistorakenteet-666410",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 13 - Tietotyypit, const, var, let-667936",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 3 - haaste aikaleimassa 725 (palautus viim. keskiviikkona)-659539(1)",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 4 - haaste aikaleimassa 1019 (palautus viim. keskiviikkona)-661548",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 5 HAASTE (palautus viim. keskiviikkona)-664327",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 7 - Listat 2835-665716",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet OSA 8 - Funktiot 2114-665717",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet TIISTAI LUENTOTEHTÄVÄ 1 (palautus viim. keskiviikkona)-661559",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet TIISTAI LUENTOTEHTÄVÄ 2 (palautus viim. keskiviikkona)-664019",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "T42T177OJ-3001-JavaScript perusteet TIISTAI LUENTOTEHTÄVÄ 2 (palautus viim. keskiviikkona)-664019(1)",
+        "quizFilename": "",
+        "scenario": 1,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Keskiviikon pakolliset tehtävät-vastaukset.csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Maanantain tehtävät-vastaukset.csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Maanantain tehtävät-vastaukset.json",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Parsons Puzzle tehtävä vk 3 maanantai-vastaukset.csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Parsons Puzzle tehtävät vk 3 tiistai-vastaukset.csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Perjantain pakolliset tehtävät-vastaukset.csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Peräkkäisyys Blocly ja Parsons Puzzle (palautus viim. keskiviikkona)-vastaukset(1).csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-vastaukset(1).csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-vastaukset(2).csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujatTESTIMATSKU.csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Tiistain pakolliset tehtävät-vastaukset.csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Tiistain pakolliset tehtävät-vastaukset.json",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    },
+    {
+        "taskFolder": "",
+        "quizFilename": "T42T177OJ-3001-Torstain pakolliset tehtävät-vastaukset.csv",
+        "scenario": 3,
+        "reportingLevel": 1,
+        "codeLength": 4
+    }
+]

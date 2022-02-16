@@ -7,7 +7,12 @@ var rootfilelist =[];
 var taskFolderList = [];
 var initialAssignmentConfigurations = [];
 var codeChecker = require('./codeCheck');
+var quizAndTaskCount=0; // TODO: HOW TO HANDLE SCENARIO 2=>task and quiz-combination?!!! IMPORTANT.
+// reducing one of count if task related to quiz? 
+// how to recognize? when assignment structure has taskFolder AND quizFileName. 
 //const config = require('./config.json')
+// Observation: count of actual work remains the same, so above pondering may not be relevant
+// count of files and folders 
 
 //var rootdirectory = "file:///D:/TESTIMATERIAALIA/";
 var rootdirectory = "./TESTIMATERIAALIA/";
@@ -24,7 +29,7 @@ function readDirectoryFileNames(scenario, filelist, stringsToCheck, statisticall
           // this forks to multiple async calls with shared statisticscallback. Where to call data_grab? 
           // TODO remove rivit-parameter
           //readFileToArray(rivit, stringsToCheck, "./palautetut/"+file, statisticallback);
-          var fuldir = "./TESTIMATERIAALIA/"+file;
+          var fuldir = rootdirectory+file;
           var isFile = fs.lstatSync(fuldir).isFile();
           var confstruct = fillConfStruct(file);
           initialAssignmentConfigurations.push(confstruct);
@@ -41,7 +46,7 @@ function readDirectoryFileNames(scenario, filelist, stringsToCheck, statisticall
 
 function fillConfStruct(filename) {
     var confStruct ={};
-    var fuldir = "./TESTIMATERIAALIA/"+filename;
+    var fuldir = rootdirectory+filename;
     var isFile = fs.lstatSync(fuldir).isFile();
     if (isFile) {
         confStruct.taskFolder = "";
@@ -98,20 +103,48 @@ function readconfFile(readyToStartCourceCheck) {
 function getConfData() {
     var confDone = fs.existsSync("\alphabet.json");
     if (!confDone){
-        readDirectoryFileNames(readyToStartCourceCheck); 
+        readDirectoryFileNames(readyToStartCourceCheck); //WORKS FINE
     }
     else{
-        readconfFile(readyToStartCourceCheck);
+        readconfFile(readyToStartCourceCheck);//TODO: NOT WORKING!!! 
     }
 }
 //https://nodejs.dev/learn/working-with-folders-in-nodejs
-
+/**
+ * MAIN start of courcehck
+ */
 function readyToStartCourceCheck(){
     console.log("looping through files");
     //need to check that all get done in good order, callbacks will cause problems with global variables
     //wait-function? 
     //reports attached to copy of course check? ensin vain yksi
-    codeChecker.codeCheckMain(initialAssignmentConfigurations[0]);
+    codeChecker.codeCheckMain(initialAssignmentConfigurations[0],rootdirectory, );
+    console.log("Kurssi loppu");
+}
+
+/**
+ * Tis is called for all tasks and quizzess in course folder
+ * When all tasks and quizzes are analyzed, then final student focues
+ * raport is made,
+ * Aim is to repeat this often and find students in need before they ask help
+ * Precondition is, that students do make submissions to tasks/quizzes
+ * taskQuizAnalysisTable is a struct with task details and list of student analysis
+ */
+function courseCallBack(taskQuizAnalysisTable){
+
+    currentCount++;
+    if (quizAndTaskCount >= currentCount){
+
+    }
+    //when all tasks are evaluated, call courseTatusReportPerStudent
+}
+
+
+function courseStatusReportPerStudent(){
+    // report every help/intervention needing student 
+    // order by error count of student, max errors or missing submissions first. 
+    //  list task submissions of the student with errors in those. 
+    //  here we need to think about the topics teached. 
 
 }
 

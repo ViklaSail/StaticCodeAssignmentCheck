@@ -37,7 +37,6 @@ function testGetTaskCheckParameters(taskName){
   }
   console.log(allTaskCheckWords);
   //array.find(function(element, index, array),thisValue)
-  
   var found = allTaskCheckWords.find(function(element) {
     if(element.taskFolder==taskName){
       console.log(taskName);

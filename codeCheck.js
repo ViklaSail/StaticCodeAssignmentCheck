@@ -176,7 +176,8 @@ function processSubmission(scenario, student, tiedostonimi, stringsToCheck, cont
   //var foundChecklist = readQuizData(student);// TODO: make sure this returns right thing in scenario 1!!!! KORJAA Myös pseudo
   //console.log(student + foundChecklist);
   //fileStatisticsCallback tänne parametrina ja sitä sitten kutsutaan joka kerta!!!!
-  JSHINT(content.toString('utf-8'),{ undef: true, "node": true, "devel": true}); //"node": true
+  console.log(tiedostonimi + " ");
+  JSHINT(content.toString('utf-8'),{ undef: true, "node": true, "devel": true}); //"node": true MIKSI TÄSSÄ TOISEEN KERTAAN UTF-8
   //lista.push(JSHINT.data()); //lisää tietorakenne tähän, lisäksi tiedoston nimi. 
   if(JSHINT.data().errors){
     errcount = JSHINT.data().errors.length;
@@ -261,7 +262,7 @@ function fileStatisticsCallback(scenario, submissionRecord){///TÄSSÄ UNDEFINED
   // kutsuttaessa lisää tilasto-arrayhyn tarvittavat tiedot (globaali array?). kun on kutsuttu yhtä monta kertaa kun on rivejä filenamelistassa
   //kirjoitetaan tilasto-array tiedostoon ja lähdetään. Tässä on ongelmana ainoastaan sen funktio-osoittimen tuominen tänne asti. 
   var tiedostoLkm = icon.length;
-  if (scenario==2 || scenario==3)
+  if (scenario==3)
     tiedostoLkm= allQuizzCount;
   studentSubmissionAnalysis.push(submissionRecord);
   if (filecount>=tiedostoLkm) {
@@ -281,10 +282,14 @@ function fileStatisticsCallback(scenario, submissionRecord){///TÄSSÄ UNDEFINED
  * 1. single run for one record = general feasibility
  * 2. single run for 3 records
  */
-function codeCheckMain(submission){
+function codeCheckMain(submission,courseroot){
   console.log("starting file and folder operations, one by one");
   var taskDetailsToCheck = quizModule.GetTaskCheckParameters(submission.taskFolder);
-  console.log(submission + taskDetailsToCheck);
+  console.log(submission + taskDetailsToCheck); //TODO RAKENNA TASKROOT
+  var taskroot = "";
+  if(submission.scenario==1 || submission.scenario==2) {
+    taskroot = courseroot + submission.taskFolder+"/";
+  }
   readFileNames(submission.scenario, icon, taskroot, fileStatisticsCallback);
 }
 
@@ -294,7 +299,7 @@ if (require.main === module) {
     console.log("content: ", testi); 
   });*/
   var taskroot = "./palautetut/";
-  var scenario = 3; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
+  var scenario = 2; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
   console.log("luetaan tiedosto async");
   console.log("luotaan hakemiston tiedostonimet async callback");
   readFileNames(scenario, icon, taskroot, fileStatisticsCallback);
