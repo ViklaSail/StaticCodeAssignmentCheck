@@ -7,6 +7,19 @@ function testGetQuizSubmissions(timeoutCallback){
   setTimeout(timeoutCallback, 5500, fakeCheckStructureList);
 }
 
+taskObjectRegressionTest = {
+  codeLength:4,
+  filelist: [],
+  quizFilename:"",
+  reportingLevel:1,
+  scenario:1,
+  studentSubmissionAnalysis: [],
+  submissionWaitList: [],
+  taskFolder:"T42T177OJ-3001-JavaScript perusteet OSA 10 - IF lause 2606-665951",
+  filecountForCallback: 0,
+  allQuizzCount: 0
+  };
+
 commonCheckStruct = {checkThese: { 
   variables: [{name:"", count: 0} ],
   commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1} ],
@@ -209,5 +222,6 @@ module.exports = {
     taskOfStudent2: taskOfStudent2,
     taskOfStudent3: taskOfStudent3,
     commonCheckStruct: commonCheckStruct,
-    taskCheckStructs: taskCheckStructs
+    taskCheckStructs: taskCheckStructs,
+    taskObjectRegressionTest: taskObjectRegressionTest
 };

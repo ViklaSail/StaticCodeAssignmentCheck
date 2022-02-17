@@ -6,6 +6,7 @@ var count;
 var rootfilelist =[];
 var taskFolderList = [];
 var initialAssignmentConfigurations = [];
+var reportingBaseForAllTasks = [];
 var codeChecker = require('./codeCheck');
 var quizAndTaskCount=0; // TODO: HOW TO HANDLE SCENARIO 2=>task and quiz-combination?!!! IMPORTANT.
 // reducing one of count if task related to quiz? 
@@ -59,6 +60,10 @@ function fillConfStruct(filename) {
     }
     confStruct.reportingLevel = 1;
     confStruct.codeLength=4;
+    confStruct.filelist = [];//suuporting initial one-submission architecture
+    confStruct.studentSubmissionAnalysis = [];// supporting initial one-submission architecture
+    confStruct.filecountForCallback=0;
+    confStruct.allQuizzCount=0;
     return confStruct;
 }
 
@@ -70,20 +75,20 @@ function allFilesRead(){
         console.table(rootfilelist);
         console.table(taskFolderList);
         console.table(initialAssignmentConfigurations);
-        writeConfigurations();
+        writeConfigurations(readyToStartCourceCheck);
     }
 
 }
 
-function writeConfigurations(readyToStartCourceCheck) {
+function writeConfigurations(courcecheck) {
     var jsonContent = JSON.stringify(initialAssignmentConfigurations);
     fs.writeFile("./alphabet.json", jsonContent, 'utf8', function (err) {
         if (err) {
             return console.log(err);
         }
-    
         console.log("The file was saved!");
-        readyToStartCourceCheck();
+        courcecheck();
+        //readyToStartCourceCheck();
     }); 
     
 }
@@ -111,14 +116,16 @@ function getConfData() {
 }
 //https://nodejs.dev/learn/working-with-folders-in-nodejs
 /**
- * MAIN start of courcehck
+ * MAIN start of courcehck readyToStartCourceCheck
  */
 function readyToStartCourceCheck(){
     console.log("looping through files");
     //need to check that all get done in good order, callbacks will cause problems with global variables
     //wait-function? 
     //reports attached to copy of course check? ensin vain yksi
-    codeChecker.codeCheckMain(initialAssignmentConfigurations[0],rootdirectory, );
+    console.log(initialAssignmentConfigurations[0]);
+    codeChecker.codeCheckMain(initialAssignmentConfigurations[0], rootdirectory, courseCallBack);
+    //codeChecker.codeCheckMain(initialAssignmentConfigurations[11], rootdirectory);
     console.log("Kurssi loppu");
 }
 
@@ -132,7 +139,7 @@ function readyToStartCourceCheck(){
  */
 function courseCallBack(taskQuizAnalysisTable){
 
-    currentCount++;
+    currentCount++;//global variable
     if (quizAndTaskCount >= currentCount){
 
     }

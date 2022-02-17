@@ -20,43 +20,40 @@ var testModule = require('./testVariables');
 var quizModule = require('./quizModule');
 var fs = require('fs');
 const { JSHINT } = require('jshint');
-var lista =[];
 var icon = [];
-var studentSubmissionAnalysis = [];
-var rivit = [];
-var fileErrors = [];
+var studentSubmissionAnalysis = [];// TODO REMOVE AND MOVE TO SUMBISSION RECORD
 var path = require('path');
 var filecount = 0;
-var quizObjectListGlobal;
+//var quizObjectListGlobal; //TODO REMOVE AND USE assignmentRecord
 var readAllQuizzDataDone=false; // used with scenario 1 and 2 at processSubmissionCallBack
-var submissionWaitList=[]; // because of callbacks and async operations. 
-var allQuizzData;
-var allQuizzCount=0;
+//var submissionWaitList=[]; // because of callbacks and async operations in scenario 2 TODO REMOVE!!! MOVE TO SUBMISSION RECORD
+var allQuizzData; // TODO use assignmentRecord
+var allQuizzCount=0; // TODO use assignmentRecord
 
 function getScenario1StringsToCheck(){
   return testModule.taskOfStudent; //TODO to do point to configuration file. 
 }
 
-function readAllQuizzData(scenario, statisticallback) {
+function readAllQuizzData(scenario, statisticallback, assignmentRecord) {
   if (scenario==3){ //for loop list through. call processSubmission
     console.log("TODO scenario 3 QUIZ ALONE");
-    allQuizzData = quizModule.getQuizSubmissions( (quizObjectList) => {
-      allQuizzCount=quizObjectList.length;
+    assignmentRecord.allQuizzData = quizModule.getQuizSubmissions( (quizObjectList) => {
+      assignmentRecord.allQuizzCount=quizObjectList.length;
       for(var i=0;i<quizObjectList.length;i++){
         console.log("content: ", quizObjectList[i]);
         //TODO: here above-mentioned for-loop
-
-
-        processSubmission(scenario, quizObjectList[i].name,"", quizObjectList[i].checkThese, quizObjectList[i].submission, statisticallback);
+        processSubmission(scenario, quizObjectList[i].name,"", quizObjectList[i].checkThese, quizObjectList[i].submission, statisticallback, assignmentRecord);
       }
     });
   } else if (scenario==2){
     console.log("TODO scenario 2 quiz + connected task, ASYNC");
-    quizModule.getQuizSubmissions( (quizObjectList) => {
+    /*assignmentRecord.allQuizzData =*/ quizModule.getQuizSubmissions( (quizObjectList) => {
       // TODO: testhere need to make sure that processSubmissionCallback is called
-      quizObjectListGlobal = quizObjectList;
-      readAllQuizzDataDone = true;
-      processSubmissionCallback(scenario, "submissionsDone","", statisticallback );
+      assignmentRecord.allQuizzCount=quizObjectList.length;
+      assignmentRecord.allQuizzData = quizObjectList;
+      //quizObjectListGlobal = quizObjectList;
+      //readAllQuizzDataDone = true;
+      processSubmissionCallback(scenario, "submissionsDone","", statisticallback, assignmentRecord );
       console.log("content: ", quizObjectList); 
     });
   } else {
@@ -69,13 +66,12 @@ function safetyTimeout(testi){
   console.log("TIMEOUT TRIGGERED"+testi);
 }
 
-function readQuizData(name){
-  //TODO find record from quizObjectListGlobal with name
+function readQuizData(name, assignmentRecord){
   //{givenName: "testinimi", surname: "sukunimi"}
-  //readAllQuizzDataDone=false; TÄHÄN VAIKUTTAA TIMEOUT!!! 
+  //assignmentRecord.allQuizzCount>0=false; TÄHÄN VAIKUTTAA TIMEOUT!!! 
   //TÄSSÄ ISOJA ONGELMIA. TODO TESAA LIVE-MATERIAALILLA. TESTIELSEEN THROW
-  foundItem = quizObjectListGlobal.find(function(forCheckingCode){
-    if(readAllQuizzDataDone) {
+  foundItem = assignmentRecord.allQuizzData.find(function(forCheckingCode){
+    if(assignmentRecord.allQuizzCount>0) {
       var givennameSame = forCheckingCode.name.givenName == name.givenName;
       var surnameSame = forCheckingCode.name.surname == name.surname;
       if (givennameSame && surnameSame){
@@ -93,32 +89,32 @@ function readQuizData(name){
 }
 
 //* FUNCTION processSubmissionCallback(tiedostonimi, stringsToCheck)
-function processSubmissionCallback(scenario, tiedostoNimi,content,statCallback){
+function processSubmissionCallback(scenario, tiedostoNimi,content,statCallback, assignmentRecord){
   //Miten varmistetaan tämän funktion kutsu jos timeout kestää liian kauan!!!
-//  *  IF readAllQuizzDataDone not ready
+//  *  IF assignmentRecord.allQuizzCount>0 not ready
 // name TODO tässä funktiossa potentiaalinen crash!!!
   if(scenario==1){
     student = parseName(tiedostoNimi);
     stringsToCheck = getScenario1StringsToCheck();
-    processSubmission(scenario, student, tiedostoNimi, stringsToCheck.checkThese, content.toString('utf-8'), statCallback);
+    processSubmission(scenario, student, tiedostoNimi, stringsToCheck.checkThese, content.toString('utf-8'), statCallback, assignmentRecord);
   } else 
-  if(!readAllQuizzDataDone) { /**** */
-    submissionWaitList.push({"filename": tiedostoNimi, "content": content});
+  if(!assignmentRecord.allQuizzCount>0) { /**** */
+    assignmentRecord.submissionWaitList.push({"filename": tiedostoNimi, "content": content});
   } else {
     //CALL readQuizData for student
     if (content){//if NOT coming from callback with nothing
-      var checksForStudent = readQuizData(parseName(tiedostoNimi));
+      var checksForStudent = readQuizData(parseName(tiedostoNimi),assignmentRecord);
       if(!tiedostoNimi)
         console.log("error tiedostinomi empty");
       var name = parseName(tiedostoNimi);
-      processSubmission(scenario, name, tiedostoNimi, checksForStudent.checkThese, content.toString('utf-8'), statCallback);
+      processSubmission(scenario, name, tiedostoNimi, checksForStudent.checkThese, content.toString('utf-8'), statCallback, assignmentRecord);
     }
-    for (let index = 0; index < submissionWaitList.length; ++index) {
-      var tiedostoFromList = submissionWaitList[index].filename;
+    for (let index = 0; index < assignmentRecord.submissionWaitList.length; ++index) {
+      var tiedostoFromList = assignmentRecord.submissionWaitList[index].filename;
       var name = parseName(tiedostoFromList);
-      var contentFromList =  submissionWaitList[index].content;
-      var checksForStudentAtList = readQuizData(name); // TODO  this need to be done here or above
-      processSubmission(scenario, name, tiedostoFromList, checksForStudentAtList.checkThese, contentFromList, statCallback);
+      var contentFromList =  assignmentRecord.submissionWaitList[index].content;
+      var checksForStudentAtList = readQuizData(name,assignmentRecord); // TODO  this need to be done here or above
+      processSubmission(scenario, name, tiedostoFromList, checksForStudentAtList.checkThese, contentFromList, statCallback, assignmentRecord);
     }
   }
  }
@@ -147,18 +143,18 @@ function parseName(filename){
  * @param {*} statCallback 
  * @param {*} callback 
  */
-function readFileToArray(scenario, filelist, tiedosto, statCallback) {
+function readFileToArray(scenario, filelist, tiedosto, statCallback, assignmentRecord) {
   //console.log(tiedosto);
   fs.readFile(tiedosto, function read(err, data) {
     if (err) {
         throw err;
     }
     const content = data;
-    filelist = data;
+    //filelist = data;
     //let tiedostoNimi = tiedosto.replace("./palautetut/", "");
     var tiedostoNimi = path.basename(tiedosto);
     // Or put the next step in a function and invoke it
-    processSubmissionCallback(scenario, tiedostoNimi,content,statCallback);
+    processSubmissionCallback(scenario, tiedostoNimi,content,statCallback, assignmentRecord);
   });
   console.log("LOPPU READFILETOARRAY");
 }
@@ -169,7 +165,7 @@ function readFileToArray(scenario, filelist, tiedosto, statCallback) {
  * @param {*} staCallBack 
  */
 
-function processSubmission(scenario, student, tiedostonimi, stringsToCheck, content, staCallBack) {
+function processSubmission(scenario, student, tiedostonimi, stringsToCheck, content, staCallBack, assignmentRecord) {
   let koodi = content;//content.toString('utf-8');
   let errcount = 0;
   let errorList =[];
@@ -195,7 +191,7 @@ function processSubmission(scenario, student, tiedostonimi, stringsToCheck, cont
   submission.commands = commandWarnings;
   submission.variables =variableWarnings;
  
-  staCallBack(scenario,submission);
+  staCallBack(scenario,submission, assignmentRecord);
 }
 
 function reduceErrors(list){
@@ -215,7 +211,7 @@ function reduceErrors(list){
 }
 
 //TODO not in pseudo \TESTIMATERIAALIA
-function readDirectoryFileNames(scenario, filelist, taskroot, statisticallback){
+function readDirectoryFileNames(scenario, filelist, taskroot, statisticallback, assignmentRecord){
   //var dirPath = path.join(__dirname, "./palautetut/");
   var dirPath = path.join(__dirname, taskroot);
   fs.readdir(dirPath, function (err, files) {
@@ -225,8 +221,8 @@ function readDirectoryFileNames(scenario, filelist, taskroot, statisticallback){
     files.forEach(function (file) {
         // this forks to multiple async calls with shared statisticscallback. Where to call data_grab? 
         // TODO remove rivit-parameter
-        readFileToArray(scenario, filelist, taskroot+file, statisticallback);
-        filelist.push(file);
+        readFileToArray(scenario, filelist, taskroot+file, statisticallback, assignmentRecord);
+        assignmentRecord.filelist.push(file);
     });
   });
 
@@ -239,35 +235,39 @@ function readDirectoryFileNames(scenario, filelist, taskroot, statisticallback){
  * @param {*} statisticallback 
  * @param {*} callback 
  */
-function readFileNames(scenario, filelist, taskroot, statisticallback) {
+function readFileNames(scenario, filelist, taskroot, statisticallback, assignmentRecord) {
   if (scenario==1){
-    readDirectoryFileNames(scenario, filelist, taskroot, statisticallback);
+    readDirectoryFileNames(scenario, filelist, taskroot, statisticallback, assignmentRecord);
   } else if (scenario == 2) { //quiz-task-combo
     //ASYNC readAllQuizzData(scenario = 2, )
-    readAllQuizzData(scenario,statisticallback);
-    readDirectoryFileNames(scenario, filelist, taskroot, statisticallback);
+    readAllQuizzData(scenario,statisticallback, assignmentRecord);
+    readDirectoryFileNames(scenario, filelist, taskroot, statisticallback, assignmentRecord);
   } else if (scenario == 3) { //quiz alone no files
     console.log("TODO: scenario 3 handling")
-    readAllQuizzData(scenario,statisticallback);
+    readAllQuizzData(scenario,statisticallback, assignmentRecord);
   }
 }
 
 //tässä lasketaan montako fileä on käsitelty. tämä välitetään parametrina ketjuun
 // https://www.npmjs.com/package/html-pdf raportin tekoon tässä? kutsutaanko erillistä funktiota? Kyllä. 
 //function fileStatisticsCallback(tiedostonimi, errcount, errorList, commandWarnings, variableWarnings){
-function fileStatisticsCallback(scenario, submissionRecord){///TÄSSÄ UNDEFINED, PARAMETRIHÄIRIÖ!!! 
-    //filereport = [tiedostonimi,errcount,errorList, commandWarnings, variableWarnings];
-  console.log(filecount);
-  filecount++;
+function fileStatisticsCallback(scenario, submissionRecord, assignmentRecord){///TÄSSÄ UNDEFINED, PARAMETRIHÄIRIÖ!!! 
+// TODO courseRun fix here
+  //filereport = [tiedostonimi,errcount,errorList, commandWarnings, variableWarnings];
+  console.log(filecount); console.log(assignmentRecord.filecountForCallback);
+  //filecount++; 
+  assignmentRecord.filecountForCallback++;
   // kutsuttaessa lisää tilasto-arrayhyn tarvittavat tiedot (globaali array?). kun on kutsuttu yhtä monta kertaa kun on rivejä filenamelistassa
   //kirjoitetaan tilasto-array tiedostoon ja lähdetään. Tässä on ongelmana ainoastaan sen funktio-osoittimen tuominen tänne asti. 
-  var tiedostoLkm = icon.length;
+  var tiedostoLkm = assignmentRecord.filelist.length;
   if (scenario==3)
-    tiedostoLkm= allQuizzCount;
-  studentSubmissionAnalysis.push(submissionRecord);
-  if (filecount>=tiedostoLkm) {
+    tiedostoLkm= assignmentRecord.allQuizzCount;
+    assignmentRecord.studentSubmissionAnalysis.push(submissionRecord); //assignmentRecord.
+  //if (filecount>=tiedostoLkm) {
+  if (assignmentRecord.filecountForCallback>=tiedostoLkm) { 
+    console.log("TODO TO DO: in scenario 3 use and add allQuizzCount??? or is the name only missleading")
     console.log("kirjoitetaan analyysi-taulukko tiedostoon, tehdään raportti. ");
-    taskChecking.prepareReport(studentSubmissionAnalysis);
+    taskChecking.prepareReport(assignmentRecord.studentSubmissionAnalysis);
   }
 }
 
@@ -282,7 +282,7 @@ function fileStatisticsCallback(scenario, submissionRecord){///TÄSSÄ UNDEFINED
  * 1. single run for one record = general feasibility
  * 2. single run for 3 records
  */
-function codeCheckMain(submission,courseroot){
+function codeCheckMain(submission,courseroot, courseCallBack){
   console.log("starting file and folder operations, one by one");
   var taskDetailsToCheck = quizModule.GetTaskCheckParameters(submission.taskFolder);
   console.log(submission + taskDetailsToCheck); //TODO RAKENNA TASKROOT
@@ -290,19 +290,23 @@ function codeCheckMain(submission,courseroot){
   if(submission.scenario==1 || submission.scenario==2) {
     taskroot = courseroot + submission.taskFolder+"/";
   }
-  readFileNames(submission.scenario, icon, taskroot, fileStatisticsCallback);
+  readFileNames(submission.scenario, submission.filelist, taskroot, fileStatisticsCallback);
 }
 
 if (require.main === module) {
-  //setTimeout(safetyTimeout, 1500, 'funky');
-  /*quizModule.getQuizSubmissions( (testi) => {
-    console.log("content: ", testi); 
-  });*/
+/**
+ * Muutetaan regressio toimimaan samalla structilla kuin courserun
+ * taskObjectRegressionTest
+ */
+  var test = testModule.taskObjectRegressionTest;
+  var fileListForRegression = [];
   var taskroot = "./palautetut/";
-  var scenario = 2; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
+  //test.taskFolder = taskroot;
+  var scenario = 3; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
   console.log("luetaan tiedosto async");
   console.log("luotaan hakemiston tiedostonimet async callback");
-  readFileNames(scenario, icon, taskroot, fileStatisticsCallback);
+  //readFileNames(scenario, icon, taskroot, fileStatisticsCallback);
+  readFileNames(scenario, test.filelist, taskroot, fileStatisticsCallback, test);
 }
 /**
  * OHJEITA: SKENAARIOIDEN KÄSITTELY

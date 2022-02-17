@@ -78,7 +78,8 @@ function checkWords(code, wordlist) {
    * 
    * @param {*} multiLevelTableForReport 
    */
-  function prepareReport(multiLevelTableForReport){
+  function prepareReport(multiLevelTableForReport){ 
+    console.log("TODO, parameter should be different???")
     //console.table(multiLevelTableForReport);
     var defectiveAssignment= [];
     var cleanAssignmentes = [];
