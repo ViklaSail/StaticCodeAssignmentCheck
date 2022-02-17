@@ -17,7 +17,7 @@ const { getQuizSubmissions } = require('./testVariables');
 var fake = require('./testVariables');
 const fs = require('fs');
 const csv = require('csv-parser');
-const csvpath = "./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv";
+//const csvpath = "./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv";
 var variable_list= [];
 var structure_list = [];
 var listOfQuizAnswers = [];
@@ -60,7 +60,8 @@ function readAllTaskChecks(){
   allTaskCheckWords=fake.taskCheckStructs;
 }
 
-function get_all_Students(callback) {
+function get_all_Students(csvpath, callback) {
+  
   fs.createReadStream(csvpath)
     .on('error', () => {
         // handle error
@@ -68,37 +69,41 @@ function get_all_Students(callback) {
     .pipe(csv())
     .on('data', (row)  => {
         var First_name = row["Etunimi"];
-        var email = row["Sähköpostiosoite"];
-        var surname = remove_from_email(email);
-        var question = row["Kysymys 1"];
-        var answer = row["Vastaus 1"];
-        if ((question.includes("Required Structures:")) && (question.includes("Required Variables:"))) {
-          var structure_array = find_structure(question);
-          var varbles_array = find_variables(question);
-          var variable_list = create_object_variables(varbles_array);
-          var structure_list = create_object_stucture(structure_array);
-      } else {
-          var structure_list = [];
-          var variable_list= [];
+        if (First_name) {
+          var email = row["Sähköpostiosoite"];
+          var surname = remove_from_email(email);
+          var question = row["Kysymys 1"];
+          var answer = row["Vastaus 1"];
+          if ((question.includes("Required Structures:")) && (question.includes("Required Variables:"))) {
+            var structure_array = find_structure(question);
+            var varbles_array = find_variables(question);
+            var variable_list = create_object_variables(varbles_array);
+            var structure_list = create_object_stucture(structure_array);
+        } else {
+            var structure_list = [];
+            var variable_list= [];
 
-          structure_list[row] = {
-          name: "Error",
-          value: 0
-          };
-
-          variable_list[row] = {
+            structure_list[row] = {
             name: "Error",
             value: 0
-          };
+            };
+
+            variable_list[row] = {
+              name: "Error",
+              value: 0
+            };
+          }
+          //var checkThese = {"variables":variable_list, "commands":structure_list};
+          //var name = {"givenName":First_name, "surname":surname};
+          //var submission = {"submission":answer};
+          var taskOfStudents = {};//{checkThese, name, submission};
+          taskOfStudents.name = {"givenName":First_name, "surname":surname};
+          taskOfStudents.checkThese = {"variables":variable_list, "commands":structure_list};
+          taskOfStudents.submission=answer;
+          listOfQuizAnswers.push(taskOfStudents);
+        } else {
+          console.log("ERRONEOUS LINE "+row);
         }
-        //var checkThese = {"variables":variable_list, "commands":structure_list};
-        //var name = {"givenName":First_name, "surname":surname};
-        //var submission = {"submission":answer};
-        var taskOfStudents = {};//{checkThese, name, submission};
-        taskOfStudents.name = {"givenName":First_name, "surname":surname};
-        taskOfStudents.checkThese = {"variables":variable_list, "commands":structure_list};
-        taskOfStudents.submission=answer;
-        listOfQuizAnswers.push(taskOfStudents);
     })
     .on('end', (testi) => {
         console.log(testi);

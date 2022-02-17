@@ -3,6 +3,7 @@ var path = require('path');
 const { start } = require('prompt');
 const { resourceLimits } = require('worker_threads');
 var count;
+var currentCount=0;
 var rootfilelist =[];
 var taskFolderList = [];
 var initialAssignmentConfigurations = [];
@@ -123,27 +124,37 @@ function readyToStartCourceCheck(){
     //need to check that all get done in good order, callbacks will cause problems with global variables
     //wait-function? 
     //reports attached to copy of course check? ensin vain yksi
-    console.log(initialAssignmentConfigurations[0]);
-    codeChecker.codeCheckMain(initialAssignmentConfigurations[0], rootdirectory, courseCallBack);
+    //console.log(initialAssignmentConfigurations[0]);
+    //FOR LOOP TÄHÄN!!!! 
+    for (const element of initialAssignmentConfigurations) {
+        // ...use `element`...
+        element.courseCallBackFunction = courseCallBack;
+        codeChecker.codeCheckMain(element, rootdirectory);
+    }
+    //codeChecker.codeCheckMain(initialAssignmentConfigurations[0], rootdirectory);
     //codeChecker.codeCheckMain(initialAssignmentConfigurations[11], rootdirectory);
     console.log("Kurssi loppu");
 }
 
 /**
  * Tis is called for all tasks and quizzess in course folder
- * When all tasks and quizzes are analyzed, then final student focues
- * raport is made,
+ * When all tasks and quizzes are analyzed, then final student focused
+ * report is made,
  * Aim is to repeat this often and find students in need before they ask help
  * Precondition is, that students do make submissions to tasks/quizzes
  * taskQuizAnalysisTable is a struct with task details and list of student analysis
+ * 
+ * OBS: all is hanging in global table passed as parameter, so no need to get anything here
+ * Just checking that enough callback calls come in. for debugging purposes we get the courseSubmisson record. 
  */
-function courseCallBack(taskQuizAnalysisTable){
-
+function courseCallBack(courseSubmission){
+    console.log(courseSubmission);
+    quizAndTaskCount = initialAssignmentConfigurations.length;
     currentCount++;//global variable
-    if (quizAndTaskCount >= currentCount){
-
+    if (quizAndTaskCount <= currentCount){
+        //when all tasks are evaluated, call courseTatusReportPerStudent
+        courseTatusReportPerStudent();
     }
-    //when all tasks are evaluated, call courseTatusReportPerStudent
 }
 
 
@@ -152,7 +163,10 @@ function courseStatusReportPerStudent(){
     // order by error count of student, max errors or missing submissions first. 
     //  list task submissions of the student with errors in those. 
     //  here we need to think about the topics teached. 
-
+    console.log("Building raport");
+    console.log("Order by error count of student");
+    console.log("Report task details for every student");
+    console.log("PRINT teacher report");
 }
 
 if (require.main === module) {

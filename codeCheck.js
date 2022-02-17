@@ -20,46 +20,35 @@ var testModule = require('./testVariables');
 var quizModule = require('./quizModule');
 var fs = require('fs');
 const { JSHINT } = require('jshint');
-var icon = [];
-var studentSubmissionAnalysis = [];// TODO REMOVE AND MOVE TO SUMBISSION RECORD
 var path = require('path');
-var filecount = 0;
-//var quizObjectListGlobal; //TODO REMOVE AND USE assignmentRecord
-var readAllQuizzDataDone=false; // used with scenario 1 and 2 at processSubmissionCallBack
-//var submissionWaitList=[]; // because of callbacks and async operations in scenario 2 TODO REMOVE!!! MOVE TO SUBMISSION RECORD
-var allQuizzData; // TODO use assignmentRecord
-var allQuizzCount=0; // TODO use assignmentRecord
 
 function getScenario1StringsToCheck(){
   return testModule.taskOfStudent; //TODO to do point to configuration file. 
 }
 
 function readAllQuizzData(scenario, statisticallback, assignmentRecord) {
+  var csvpath = assignmentRecord.courseroot + assignmentRecord.quizFilename;
   if (scenario==3){ //for loop list through. call processSubmission
-    console.log("TODO scenario 3 QUIZ ALONE");
-    assignmentRecord.allQuizzData = quizModule.getQuizSubmissions( (quizObjectList) => {
+      console.log("TODO scenario 3 QUIZ ALONE");
+      quizModule.getQuizSubmissions(csvpath, (quizObjectList) => {
       assignmentRecord.allQuizzCount=quizObjectList.length;
+      assignmentRecord.allQuizzData=quizObjectList;
       for(var i=0;i<quizObjectList.length;i++){
         console.log("content: ", quizObjectList[i]);
-        //TODO: here above-mentioned for-loop
         processSubmission(scenario, quizObjectList[i].name,"", quizObjectList[i].checkThese, quizObjectList[i].submission, statisticallback, assignmentRecord);
       }
     });
   } else if (scenario==2){
     console.log("TODO scenario 2 quiz + connected task, ASYNC");
-    /*assignmentRecord.allQuizzData =*/ quizModule.getQuizSubmissions( (quizObjectList) => {
-      // TODO: testhere need to make sure that processSubmissionCallback is called
+      quizModule.getQuizSubmissions(csvpath, (quizObjectList) => {
       assignmentRecord.allQuizzCount=quizObjectList.length;
       assignmentRecord.allQuizzData = quizObjectList;
-      //quizObjectListGlobal = quizObjectList;
-      //readAllQuizzDataDone = true;
       processSubmissionCallback(scenario, "submissionsDone","", statisticallback, assignmentRecord );
       console.log("content: ", quizObjectList); 
     });
   } else {
     console.log("TODO: throw an error, this is not allowed");
   }
-  console.log(allQuizzData);
 }
 
 function safetyTimeout(testi){
@@ -70,7 +59,7 @@ function readQuizData(name, assignmentRecord){
   //{givenName: "testinimi", surname: "sukunimi"}
   //assignmentRecord.allQuizzCount>0=false; TÄHÄN VAIKUTTAA TIMEOUT!!! 
   //TÄSSÄ ISOJA ONGELMIA. TODO TESAA LIVE-MATERIAALILLA. TESTIELSEEN THROW
-  foundItem = assignmentRecord.allQuizzData.find(function(forCheckingCode){
+  var foundItem = assignmentRecord.allQuizzData.find(function(forCheckingCode){
     if(assignmentRecord.allQuizzCount>0) {
       var givennameSame = forCheckingCode.name.givenName == name.givenName;
       var surnameSame = forCheckingCode.name.surname == name.surname;
@@ -88,10 +77,8 @@ function readQuizData(name, assignmentRecord){
 
 }
 
-//* FUNCTION processSubmissionCallback(tiedostonimi, stringsToCheck)
 function processSubmissionCallback(scenario, tiedostoNimi,content,statCallback, assignmentRecord){
   //Miten varmistetaan tämän funktion kutsu jos timeout kestää liian kauan!!!
-//  *  IF assignmentRecord.allQuizzCount>0 not ready
 // name TODO tässä funktiossa potentiaalinen crash!!!
   if(scenario==1){
     student = parseName(tiedostoNimi);
@@ -182,7 +169,6 @@ function processSubmission(scenario, student, tiedostonimi, stringsToCheck, cont
   var errorObject = reduceErrors(errorList);
   var commandWarnings = taskChecking.checkRequiredReserwedWords(koodi,stringsToCheck);//TODO correct function to use actual stringsToCheck parameter
   var variableWarnings = taskChecking.checkRequiredVariableNames(koodi,stringsToCheck);//TODO correct function to use actual stringsToCheck parameter
-  console.log("icon " + icon.length);
   //staCallBack(tiedostonimi+" virheitä " + errcount + " ensimäinen virheteksti" + firsterror, commandWarnings, variableWarnings); 
   var submission = {};
   submission.student = student;
@@ -254,7 +240,7 @@ function readFileNames(scenario, filelist, taskroot, statisticallback, assignmen
 function fileStatisticsCallback(scenario, submissionRecord, assignmentRecord){///TÄSSÄ UNDEFINED, PARAMETRIHÄIRIÖ!!! 
 // TODO courseRun fix here
   //filereport = [tiedostonimi,errcount,errorList, commandWarnings, variableWarnings];
-  console.log(filecount); console.log(assignmentRecord.filecountForCallback);
+  console.log(assignmentRecord.filecountForCallback);
   //filecount++; 
   assignmentRecord.filecountForCallback++;
   // kutsuttaessa lisää tilasto-arrayhyn tarvittavat tiedot (globaali array?). kun on kutsuttu yhtä monta kertaa kun on rivejä filenamelistassa
@@ -267,7 +253,8 @@ function fileStatisticsCallback(scenario, submissionRecord, assignmentRecord){//
   if (assignmentRecord.filecountForCallback>=tiedostoLkm) { 
     console.log("TODO TO DO: in scenario 3 use and add allQuizzCount??? or is the name only missleading")
     console.log("kirjoitetaan analyysi-taulukko tiedostoon, tehdään raportti. ");
-    taskChecking.prepareReport(assignmentRecord.studentSubmissionAnalysis);
+    assignmentRecord.courseCallBackFunction(assignmentRecord);
+    //taskChecking.prepareReport(assignmentRecord.studentSubmissionAnalysis);
   }
 }
 
@@ -282,7 +269,7 @@ function fileStatisticsCallback(scenario, submissionRecord, assignmentRecord){//
  * 1. single run for one record = general feasibility
  * 2. single run for 3 records
  */
-function codeCheckMain(submission,courseroot, courseCallBack){
+function codeCheckMain(submission,courseroot){
   console.log("starting file and folder operations, one by one");
   var taskDetailsToCheck = quizModule.GetTaskCheckParameters(submission.taskFolder);
   console.log(submission + taskDetailsToCheck); //TODO RAKENNA TASKROOT
@@ -290,7 +277,8 @@ function codeCheckMain(submission,courseroot, courseCallBack){
   if(submission.scenario==1 || submission.scenario==2) {
     taskroot = courseroot + submission.taskFolder+"/";
   }
-  readFileNames(submission.scenario, submission.filelist, taskroot, fileStatisticsCallback);
+  submission.courseroot = courseroot;
+  readFileNames(submission.scenario, submission.filelist, taskroot, fileStatisticsCallback, submission);
 }
 
 if (require.main === module) {
@@ -299,7 +287,6 @@ if (require.main === module) {
  * taskObjectRegressionTest
  */
   var test = testModule.taskObjectRegressionTest;
-  var fileListForRegression = [];
   var taskroot = "./palautetut/";
   //test.taskFolder = taskroot;
   var scenario = 3; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
