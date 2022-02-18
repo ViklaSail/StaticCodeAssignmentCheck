@@ -286,14 +286,26 @@ if (require.main === module) {
  * Muutetaan regressio toimimaan samalla structilla kuin courserun
  * taskObjectRegressionTest
  */
+  //codeCheckMain(submission,courseroot);
+//codeCheckMain(submission,".");
   var test = testModule.taskObjectRegressionTest;
+  test.courseCallBackFunction = ((assignmentRecord)=>{
+    console.log("coursecallback called");
+    taskChecking.prepareReport(assignmentRecord.studentSubmissionAnalysis);
+  });
+  test.scenario=3;
+  test.taskFolder = "palautetut";
+  codeCheckMain(test,"./");
+ /* 
   var taskroot = "./palautetut/";
   //test.taskFolder = taskroot;
-  var scenario = 3; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
+  var scenario = test.scenario; //scenario 1: single "task". scenario 2: Quiz + connected "task" (3: quiz alone)
   console.log("luetaan tiedosto async");
   console.log("luotaan hakemiston tiedostonimet async callback");
   //readFileNames(scenario, icon, taskroot, fileStatisticsCallback);
   readFileNames(scenario, test.filelist, taskroot, fileStatisticsCallback, test);
+  readFileNames(submission.scenario, submission.filelist, taskroot, fileStatisticsCallback, submission);
+*/
 }
 /**
  * OHJEITA: SKENAARIOIDEN KÄSITTELY

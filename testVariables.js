@@ -10,7 +10,7 @@ function testGetQuizSubmissions(timeoutCallback){
 taskObjectRegressionTest = {
   codeLength:4,
   filelist: [],
-  quizFilename:"",
+  quizFilename:"./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv",
   reportingLevel:1,
   scenario:1,
   studentSubmissionAnalysis: [],
@@ -19,6 +19,8 @@ taskObjectRegressionTest = {
   filecountForCallback: 0,
   allQuizzCount: 0
   };
+
+
 
 commonCheckStruct = {checkThese: { 
   variables: [{name:"", count: 0} ],
