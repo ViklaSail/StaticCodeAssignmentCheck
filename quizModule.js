@@ -61,7 +61,7 @@ function readAllTaskChecks(){
   allTaskCheckWords=fake.taskCheckStructs;
 }
 
-function get_all_Students(callback) {
+function get_all_Students(csvpath,callback) {
 
   fs.createReadStream(csvpath)
     .on('error', () => {
@@ -70,36 +70,42 @@ function get_all_Students(callback) {
     .pipe(csv())
     .on('data', (row)  => {
         var email = row["Sähköpostiosoite"];
-        var timestamp = row["Suoritettu"];
-        var date = convert_timestamp(timestamp);  
-        var First_name = row["Etunimi"];
-        var surname = remove_from_email(email);
-        var question = row["Kysymys 1"];
-        var answer = row["Vastaus 1"];
-        if ((question.includes("Required Structures:")) && (question.includes("Required Variables:"))) {
-          var structure_array = find_structure(question);
-          var varbles_array = find_variables(question);
-          var variable_list = create_object_variables(varbles_array);
-          var structure_list = create_object_stucture(structure_array);
-      } else {
-          var structure_list = [];
-          var variable_list= [];
-
-          structure_list[row] = {
-          name: "Error",
-          value: 0
+        if (email) {
+          var timestamp = row["Suoritettu"];
+          if (!timestamp) {
+            console.log("timestamp undefined" + csvpath);
           };
+          var date = convert_timestamp(timestamp, csvpath);  
+          var First_name = row["Etunimi"];
+          var surname = remove_from_email(email);
+          var question = row["Kysymys 1"];
+          var answer = row["Vastaus 1"];
+          if ((question.includes("Required Structures:")) && (question.includes("Required Variables:"))) {
+            var structure_array = find_structure(question);
+            var varbles_array = find_variables(question);
+            var variable_list = create_object_variables(varbles_array);
+            var structure_list = create_object_stucture(structure_array);
+          } else {
+            var structure_list = [];
+            var variable_list= [];
 
-          variable_list[row] = {
+            structure_list[row] = {
             name: "Error",
             value: 0
-          };
-}
-        var checkThese = {"Variables":variable_list, "Commands":structure_list};
-        var name = {"givenName":First_name, "surname":surname};
-        var submission = {"submission":answer, "time":date};
-        var taskOfStudents = {checkThese, name, submission,};
-        cleared_from_dublicates.push(taskOfStudents);
+            };
+
+            variable_list[row] = {
+              name: "Error",
+              value: 0
+            };
+          }
+
+          var checkThese = {"Variables":variable_list, "Commands":structure_list};
+          var name = {"givenName":First_name, "surname":surname};
+          var submission = {"submission":answer, "time":date};
+          var taskOfStudents = {checkThese, name, submission,};
+          cleared_from_dublicates.push(taskOfStudents);
+        }
     })
     .on('end', () => {
       dublivate_remove(cleared_from_dublicates);
@@ -129,9 +135,12 @@ function remove_from_email(x) {
     return surname.split('@')[0];
   }  
 
-function convert_timestamp(x) {
+function convert_timestamp(x,csvpath) {
   day = x.split('.')[0]; //// Could be problem if format is 9 instead of 09
   var month = x.split(' ')[1];
+  if(!month){
+    console.log("month undefined "+csvpath);
+  }
   month = month.substring(month.indexOf(' ') + 0);
   month = finnish_month_converter(month);
   var year = x.split(' ')[2];

@@ -10,7 +10,7 @@ function testGetQuizSubmissions(timeoutCallback){
 taskObjectRegressionTest = {
   codeLength:4,
   filelist: [],
-  quizFilename:"./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv",
+  quizFilename:"T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv",
   reportingLevel:1,
   scenario:1,
   studentSubmissionAnalysis: [],
