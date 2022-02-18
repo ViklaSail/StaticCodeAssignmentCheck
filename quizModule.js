@@ -111,26 +111,6 @@ function get_all_Students(callback) {
 
 }
 
-          //var checkThese = {"variables":variable_list, "commands":structure_list};
-          //var name = {"givenName":First_name, "surname":surname};
-          //var submission = {"submission":answer};
-          var taskOfStudents = {};//{checkThese, name, submission};
-          taskOfStudents.name = {"givenName":First_name, "surname":surname};
-          taskOfStudents.checkThese = {"variables":variable_list, "commands":structure_list};
-          taskOfStudents.submission=answer;
-          listOfQuizAnswers.push(taskOfStudents);
-        } else {
-          console.log("ERRONEOUS LINE "+row);
-        }
-    })
-    .on('end', (testi) => {
-        console.log(testi);
-        console.log("KAIKKI VALMISTA!!!!");
-        callback(listOfQuizAnswers);
-  });
-
-}
-
 function find_structure(text_to_search) {
   var structure = text_to_search.split(']')[0];
   structure = structure.substring(structure.indexOf('[') + 1);
@@ -213,6 +193,14 @@ function create_object_stucture(ar) {
 }
 
 function string_contains_number(st) {
+  if (st.includes("(")) {
+    return /\d/.test(st);
+  } else {
+      return false;
+}
+}
+
+function does_nothing(st) {
   if (st.includes("(")) {
     return /\d/.test(st);
   } else {
