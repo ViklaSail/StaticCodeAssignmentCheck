@@ -62,7 +62,7 @@ function readAllTaskChecks(){
 }
 
 function get_all_Students(csvpath,callback) {
-
+  var submissionlist = []
   fs.createReadStream(csvpath)
     .on('error', () => {
         // handle error
@@ -100,19 +100,29 @@ function get_all_Students(csvpath,callback) {
             };
           }
 
-          var checkThese = {"Variables":variable_list, "Commands":structure_list};
+          var checkThese = {"variables":variable_list, "commands":structure_list};
           var name = {"givenName":First_name, "surname":surname};
           var submission = {"submission":answer, "time":date};
           var taskOfStudents = {checkThese, name, submission,};
-          cleared_from_dublicates.push(taskOfStudents);
+          //cleared_from_dublicates.push(taskOfStudents);
+          submissionlist.push(taskOfStudents);
         }
     })
     .on('end', () => {
+      if (submissionlist.length>0)
+        dublivate_remove(submissionlist);
+      else
+        console.log("empty list");
+
+      callback(submissionlist);
+
+      /*
       dublivate_remove(cleared_from_dublicates);
       for (var x = 0; x < cleared_from_dublicates.length; x++) {
         callback(cleared_from_dublicates[i]);
       }  
         // handle end of CSV
+        */
   });
 
 }
@@ -136,6 +146,10 @@ function remove_from_email(x) {
   }  
 
 function convert_timestamp(x,csvpath) {
+  if(x=='-') {
+    return 0;
+  }
+  //console.log("x value " + x);
   day = x.split('.')[0]; //// Could be problem if format is 9 instead of 09
   var month = x.split(' ')[1];
   if(!month){
@@ -166,7 +180,7 @@ function finnish_month_converter(x) {
   else if (x = "marraskuu") {x = 11}
   else if (x= "joulukuu") {x=12}
   else  {x="unknow format"};
-  return x
+  return x;
 }
     
 function create_object_variables(array) {
@@ -218,22 +232,30 @@ function does_nothing(st) {
 }
 
 function dublivate_remove(d) {
-  i = 0;
-  counter = 0
+  var i = 0;
+  var counter = 0;
   do {
-    student = d[i].name.givenName + d[i].name.surname
-    end_time = d[i].submission.time
+    if(!d[i]){
+      console.log("empty record, empty list, nothing can be done");
+      return;
+    }
+    student = d[i].name.givenName + d[i].name.surname;
+    end_time = d[i].submission.time;
     for (let j = 1; j < d.length; j++) {
       if (student == d[j].name.givenName + d[j].name.surname){
-        if (end_time.getTime() > d[j].submission.time.getTime()) {
-          d = d.splice(j,1)
+        if (!end_time){
+          console.log("submission value -, time 0, removing record");
+          d = d.splice(j,1);
+        }
+        else if (end_time.getTime() > d[j].submission.time.getTime()) {
+          d = d.splice(j,1);
           console.log("The record in row "+ (j+2) +" has been removed because it contained a later submited dublicate in row " + (i+2) + ".")
           counter++;
         } else if (end_time.getTime() < d[j].submission.time.getTime()) {
-          d = d.splice(i,1)
+          d = d.splice(i,1);
           console.log("The record in row "+ (i+2) +" has been removed because it contained a later submited dublicate in row " + (j+2)+ ".")
           counter++;
-        };  
+        } 
         }
       }
     i++;  

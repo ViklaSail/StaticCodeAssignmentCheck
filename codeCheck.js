@@ -33,6 +33,11 @@ function readAllQuizzData(scenario, statisticallback, assignmentRecord) {
       quizModule.getQuizSubmissions(csvpath, (quizObjectList) => {
       assignmentRecord.allQuizzCount=quizObjectList.length;
       assignmentRecord.allQuizzData=quizObjectList;
+      if(quizObjectList.length<=0) {
+        console.log("empty task ERROR, special handling here");
+        console.log("quizzfile "+ assignmentRecord.quizFilename)
+        assignmentRecord.courseCallBackFunction(assignmentRecord);
+      }
       for(var i=0;i<quizObjectList.length;i++){
         console.log("content: ", quizObjectList[i]);
         processSubmission(scenario, quizObjectList[i].name,"", quizObjectList[i].checkThese, quizObjectList[i].submission, statisticallback, assignmentRecord);
@@ -240,15 +245,20 @@ function readFileNames(scenario, filelist, taskroot, statisticallback, assignmen
 function fileStatisticsCallback(scenario, submissionRecord, assignmentRecord){///TÄSSÄ UNDEFINED, PARAMETRIHÄIRIÖ!!! 
 // TODO courseRun fix here
   //filereport = [tiedostonimi,errcount,errorList, commandWarnings, variableWarnings];
+  if(assignmentRecord.quizFilename === "T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujatTESTIMATSKU.csv")
+    console.loq("errorfinding");
   console.log(assignmentRecord.filecountForCallback);
   //filecount++; 
   assignmentRecord.filecountForCallback++;
   // kutsuttaessa lisää tilasto-arrayhyn tarvittavat tiedot (globaali array?). kun on kutsuttu yhtä monta kertaa kun on rivejä filenamelistassa
   //kirjoitetaan tilasto-array tiedostoon ja lähdetään. Tässä on ongelmana ainoastaan sen funktio-osoittimen tuominen tänne asti. 
   var tiedostoLkm = assignmentRecord.filelist.length;
-  if (scenario==3)
+  if (scenario==3){
     tiedostoLkm= assignmentRecord.allQuizzCount;
-    assignmentRecord.studentSubmissionAnalysis.push(submissionRecord); //assignmentRecord.
+    if(assignmentRecord.allQuizzCount==0)
+      console.log("need to set timer for these kind of events, so that reporting surely is called");
+  }
+  assignmentRecord.studentSubmissionAnalysis.push(submissionRecord); //assignmentRecord.
   //if (filecount>=tiedostoLkm) {
   if (assignmentRecord.filecountForCallback>=tiedostoLkm) { 
     console.log("TODO TO DO: in scenario 3 use and add allQuizzCount??? or is the name only missleading")

@@ -8,6 +8,7 @@ var rootfilelist =[];
 var taskFolderList = [];
 var initialAssignmentConfigurations = [];
 var reportingBaseForAllTasks = [];
+var studentBasedList = [];
 var codeChecker = require('./codeCheck');
 var quizAndTaskCount=0; // TODO: HOW TO HANDLE SCENARIO 2=>task and quiz-combination?!!! IMPORTANT.
 // reducing one of count if task related to quiz? 
@@ -128,8 +129,11 @@ function readyToStartCourceCheck(){
     //FOR LOOP TÄHÄN!!!! 
     for (const element of initialAssignmentConfigurations) {
         // ...use `element`...
-        element.courseCallBackFunction = courseCallBack;
-        codeChecker.codeCheckMain(element, rootdirectory);
+        //if (element.quizFilename==="T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujatTESTIMATSKU.csv"){
+            console.log("löytyi");
+            element.courseCallBackFunction = courseCallBack;
+            codeChecker.codeCheckMain(element, rootdirectory);
+        //}
     }
     //codeChecker.codeCheckMain(initialAssignmentConfigurations[0], rootdirectory);
     //codeChecker.codeCheckMain(initialAssignmentConfigurations[11], rootdirectory);
@@ -151,12 +155,111 @@ function courseCallBack(courseSubmission){
     console.log(courseSubmission);
     quizAndTaskCount = initialAssignmentConfigurations.length;
     currentCount++;//global variable
+    console.log("currentCount " + currentCount + " quizAndTaskcount" + quizAndTaskCount);
+    if (currentCount==21) {
+        console.log("VIRHE? 3 kutsua vajaaksi? onko ne quizzeja?");
+        for (const element of initialAssignmentConfigurations) {
+            if((element.scenario==3) && (element.allQuizzCount==0))
+                console.log(element.quizFilename);
+        }
+    }
     if (quizAndTaskCount <= currentCount){
         //when all tasks are evaluated, call courseTatusReportPerStudent
-        courseTatusReportPerStudent();
+        var testilista = prepareStudentBasedList();
+        console.log("student based list done");
+        calculateMistakeFactor(testilista);
+        // sort descending, most cumulated errors first. 
+        testilista.sort(function(a,b){
+            var result = b.studentErrorFactor - a.studentErrorFactor;
+            return result;
+        });
+        courseTatusReportPerStudent(testilista);
     }
 }
 
+function prepareStudentBasedList(){
+    for (const courseElement of initialAssignmentConfigurations) {
+        for (const studentAnalysis of courseElement.studentSubmissionAnalysis) {
+            console.log(studentAnalysis);
+            var foundItem = studentBasedList.find(function(studentRecord){
+                if((studentRecord.student.givenName==studentAnalysis.student.givenName) && (studentAnalysis.student.surname==studentAnalysis.student.surname)) {
+                    return studentRecord;
+                }
+            });
+            if (!foundItem) {
+                //build student record and push it
+                //studentBasedList.push({courseElement})
+                console.log("add new record to studentBasedList");
+                var studRec = {"student": studentAnalysis.student};
+                studRec.taskAnalysis = [];
+                var anrec = composeAnalysisRecord(courseElement,studentAnalysis);
+                studRec.taskAnalysis.push(anrec);
+                studentBasedList.push(studRec);
+            } else {
+                console.log("add task analsysis to studentBasedListREcord");
+                var anrec = composeAnalysisRecord(courseElement,studentAnalysis);
+                foundItem.taskAnalysis.push(anrec);
+            }
+        }
+    }
+    console.log("done");
+    return studentBasedList;
+}
+
+function composeAnalysisRecord(courseElement, studentAnalysis){
+    var task ="";
+    if (courseElement.taskFolder)
+        task = courseElement.taskFolder;
+    else
+        task = courseElement.quizFilename;
+    var anrec = {"task": task};
+    anrec.variables = studentAnalysis.variables;
+    anrec.errors = studentAnalysis.errors;
+    anrec.commands = studentAnalysis.commands;
+    return anrec;
+}
+
+/**
+ * Errors:  sum together errorcounts of all analysis
+ * commands: exception in command usage, +1 to factor
+ * Variables: missing required variablename +1 to factor
+ * @param {*} studentAnalysis 
+ */
+function calculateMistakeFactor(studentAnalysis){
+    for (const student of studentAnalysis) {
+        student.studentErrorFactor = 0;
+        student.commandFactor = 0;
+        student.variableFactor = 0;
+        for (const taskAns of student.taskAnalysis) {
+            student.studentErrorFactor = student.studentErrorFactor + taskAns.errors.errcount;
+            student.commandFactor = student.commandFactor + taskAns.commands.misscount;
+            student.variableFactor = student.variableFactor + taskAns.variables.misscount;
+        }
+    }
+    console.log("mistacefactors calculated");
+}
+/**
+ * Three accounts are considered when ordering. errors, required names, required structures
+ * Errors and required structures counting = help needed- index- order!!
+ * Required names = help in doing task/copycat suspicions. 
+ * current "misscount": if usage of keyword differs, it is considered +1 to misscount. 
+ * errcount: total of static analysis errors. 
+ * Lines 
+ * "misscount" calculation: what count is told in requirements, must be met. 
+ * 
+ * Two kind of reports: 
+ *      1. copy suspicions report/task instruction reading suspicion report.
+ *      2. help-needed-report
+ * 
+ * Need to prepare list summing up persons
+ * 
+ */
+function courseTatusReportPerStudent(studentAnList) {
+    console.log("JÄRJESTELLÄÄN VIRHEIDEN MUKAAN");
+    console.log("Sort by student");
+    console.table(studentAnList);
+
+}
 
 function courseStatusReportPerStudent(){
     // report every help/intervention needing student 
