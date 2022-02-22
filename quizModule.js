@@ -69,6 +69,7 @@ function get_all_Students(csvpath,callback) {
     })
     .pipe(csv())
     .on('data', (row)  => {
+      //TODO: Andreas: loop through multiple questions/answers
         var email = row["Sähköpostiosoite"];
         if (email) {
           var timestamp = row["Suoritettu"];
@@ -80,6 +81,7 @@ function get_all_Students(csvpath,callback) {
           var surname = remove_from_email(email);
           var question = row["Kysymys 1"];
           var answer = row["Vastaus 1"];
+          findCapitalLetterWords(question);
           if ((question.includes("Required Structures:")) && (question.includes("Required Variables:"))) {
             var structure_array = find_structure(question);
             var varbles_array = find_variables(question);
@@ -109,23 +111,52 @@ function get_all_Students(csvpath,callback) {
         }
     })
     .on('end', () => {
-      if (submissionlist.length>0)
-        dublivate_remove(submissionlist);
+      if (submissionlist.length>0){
+        //submissionlist.sort( compare );
+        submissionlist.sort( comparetime );
+        stripTheList(submissionlist);
+      }
       else
         console.log("empty list");
-
       callback(submissionlist);
-
-      /*
+/*      
       dublivate_remove(cleared_from_dublicates);
       for (var x = 0; x < cleared_from_dublicates.length; x++) {
         callback(cleared_from_dublicates[i]);
+        
       }  
         // handle end of CSV
-        */
+  */    
   });
-
 }
+
+function stripTheList(submissionList){
+  submissionList.forEach(function(item, index, object) {
+    var count = submissionList.filter((element)=>{
+      return element.name.surname == item.name.surname;
+    }).length;
+    if (count>1) {
+      object.splice(index, 1);
+    }
+  });
+}
+
+function compare( a, b ) {
+  if ( a.name.surname < b.name.surname ){
+    return -1;
+  }
+  if ( a.name.surname > b.name.surname ){
+    return 1;
+  }
+  return 0;
+}
+
+function comparetime( a, b) {
+  var result = a.submission.time - b.submission.time;
+  return result;
+}
+
+
 
 function find_structure(text_to_search) {
   var structure = text_to_search.split(']')[0];
@@ -231,6 +262,8 @@ function does_nothing(st) {
 }
 }
 
+
+
 function dublivate_remove(d) {
   var i = 0;
   var counter = 0;
@@ -242,12 +275,15 @@ function dublivate_remove(d) {
     student = d[i].name.givenName + d[i].name.surname;
     end_time = d[i].submission.time;
     for (let j = 1; j < d.length; j++) {
+      var testtime = d[j].submission.time.getTime();
       if (student == d[j].name.givenName + d[j].name.surname){
         if (!end_time){
           console.log("submission value -, time 0, removing record");
           d = d.splice(j,1);
         }
         else if (end_time.getTime() > d[j].submission.time.getTime()) {
+          //var testtime = d[j].submission.time.getTime();
+          console.log(testtime);
           d = d.splice(j,1);
           console.log("The record in row "+ (j+2) +" has been removed because it contained a later submited dublicate in row " + (i+2) + ".")
           counter++;
@@ -272,13 +308,47 @@ function callbackAsParameter(y){
   console.log(y);
 }
 
-if (require.main === module) {
-  // testGetTaskCheckParameters("T42T177OJ-3001-JavaScript perusteet OSA 10 - IF lause 2606-665951");
-  testGetTaskCheckParameters("T");
+function findCapitalLetterWords(textbody){
+  // TODO: remove first line and include numbers in variables.
+  const upperCaseWords = textbody.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
+  if (upperCaseWords)
+    console.log("uppercase");
+  else
+    console.log("no uppercase");
+  console.log(upperCaseWords);
+  var commands = requiredStuff(upperCaseWords);
+  var variables = requiredStuff(upperCaseWords,false);
+  //commands = requiredCommandsStructs(upperCaseWords);
+  //var variables = requiredVariableNames(upperCaseWords);
+  console.log(commands);
+  console.log(variables);
+}
+
+function requiredStuff(textbodycapital, commandsRun=true) {
+  var commands = ["IF", "ELSE", "WHILE", "FOR",  "DO", "FUNCTION"];
+  var requiredwords=[];
+  if (!textbodycapital) {
+    return [];
+  }
+  for (var item of textbodycapital){
+    var gotStuff = commands.includes(item);
+    if (gotStuff == commandsRun){
+      console.log("not command, so variable name, adding to list");
+      if (item.length>1)
+        requiredwords.push(item);
+    }
+  }
+  return requiredwords;
 }
 
 
-
+if (require.main === module) {
+  findCapitalLetterWords("HERE'S AN UPPERCASE PART of the string");
+  findCapitalLetterWords("tässä vain lovercase lettereitä eikä muuta");
+  findCapitalLetterWords("IF ELSE IF WHILE FOR DO WHILE FUNCTION");
+  findCapitalLetterWords("tehtävässä funktion nimeksi TESTAA ja TESTAALISAA. käytä seuraavia rakenteita: FUNCTION, IF, WHILE. muuten teet niinkuin kykenet");
+  testGetTaskCheckParameters("T");
+}
 
 module.exports = {
     goo: "googoo",
@@ -288,6 +358,7 @@ module.exports = {
     
     
 };
+
 
 //get_all_Students(callbackAsParameter); Calling the main functio of file
 /**
@@ -342,4 +413,7 @@ module.exports = {
  * 
  * TODO: UI for all this. 
  * 
+ * TODO: duplicate removal fix. add submission date in list. order by submission date. 
+ * loop from start. for every record find out if there is later records for same student. 
+ * If there is, delete record. 
  */

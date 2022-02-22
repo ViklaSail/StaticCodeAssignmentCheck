@@ -10,7 +10,8 @@ function testGetQuizSubmissions(timeoutCallback){
 taskObjectRegressionTest = {
   codeLength:4,
   filelist: [],
-  quizFilename:"T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv",
+//  quizFilename:"T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv",
+  quizFilename: "T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-vastaukset.csv",
   reportingLevel:1,
   scenario:1,
   studentSubmissionAnalysis: [],
@@ -20,7 +21,7 @@ taskObjectRegressionTest = {
   allQuizzCount: 0
   };
 
-
+  //T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-vastaukset.csv
 
 commonCheckStruct = {checkThese: { 
   variables: [{name:"", count: 0} ],
@@ -107,98 +108,6 @@ taskCheckStructs = [
       "taskcheck": taskOfStudent
   }]
 
-forReportTest3 = [
-    [
-      "Aku Kontiainen_1724149_assignsubmission_file_script.js",
-      1,
-      {
-        id: "(error)",
-        raw: "Missing semicolon.",
-        code: "W033",
-        evidence: "var ammatti =\"huoltomies\"",
-        line: 3,
-        character: 26,
-        scope: "(main)",
-        a: undefined,
-        b: undefined,
-        c: undefined,
-        d: undefined,
-        reason: "Missing semicolon.",
-      },
-      [
-        "nimi: 0 should be 1",
-        "ikä: 0 should be 1",
-        "ohje: 0 should be 1",
-        "sääntö: 0 should be 1",
-      ],
-      [
-        "alert: 0 should be 1",
-        "for: 0 should be 1",
-        "if: 0 should be 1",
-        "var: 0 should be 1",
-      ],
-    ],
-    [
-      "Alina Kokko_1724154_assignsubmission_file_script.js",
-      0,
-      {
-        id: "(error)",
-        raw: "Missing semicolon.",
-        code: "W033",
-        evidence: "var ammatti =\"huoltomies\"",
-        line: 3,
-        character: 26,
-        scope: "(main)",
-        a: undefined,
-        b: undefined,
-        c: undefined,
-        d: undefined,
-        reason: "Missing semicolon.",
-      },
-      [
-        "nimi: 0 should be 1",
-        "ikä: 0 should be 1",
-        "ohje: 0 should be 1",
-        "sääntö: 0 should be 1",
-      ],
-      [
-        "alert: 0 should be 1",
-        "for: 0 should be 1",
-        "if: 0 should be 1",
-        "var: 0 should be 1",
-      ],
-    ],
-    [
-      "Anja Harju_1724148_assignsubmission_file_script.js",
-      0,
-      {
-        id: "(error)",
-        raw: "Missing semicolon.",
-        code: "W033",
-        evidence: "var ammatti =\"huoltomies\"",
-        line: 3,
-        character: 26,
-        scope: "(main)",
-        a: undefined,
-        b: undefined,
-        c: undefined,
-        d: undefined,
-        reason: "Missing semicolon.",
-      },
-      [
-        "nimi: 0 should be 1",
-        "ikä: 0 should be 1",
-        "ohje: 0 should be 1",
-        "sääntö: 0 should be 1",
-      ],
-      [
-        "alert: 0 should be 1",
-        "for: 0 should be 1",
-        "if: 0 should be 1",
-        "var: 0 should be 1",
-      ],
-    ],
-  ];
 
 /*
   module.exports = requiredVariableNames;
@@ -215,7 +124,6 @@ module.exports = {
     //requiredReservedWords: requiredReservedWords,
     reservedReport: reservedReport,
     variableReport: variableReport,
-    forReportTest3: forReportTest3,
     requiredVariableNamesNew:requiredVariableNamesNew,
     requiredReservedWordsNew:requiredReservedWordsNew,
     examVk2codingVariables: examVk2codingVariables,

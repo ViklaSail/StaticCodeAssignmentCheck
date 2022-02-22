@@ -108,7 +108,7 @@ function readconfFile(readyToStartCourceCheck) {
 }
 
 function getConfData() {
-    var confDone = fs.existsSync("\alphabet.json");
+    var confDone = false;///= fs.existsSync("\alphabet.json");
     if (!confDone){
         readDirectoryFileNames(readyToStartCourceCheck); //WORKS FINE
     }
@@ -215,6 +215,7 @@ function composeAnalysisRecord(courseElement, studentAnalysis){
     var anrec = {"task": task};
     anrec.variables = studentAnalysis.variables;
     anrec.errors = studentAnalysis.errors;
+    anrec.errorRawList = studentAnalysis.errorRawList;
     anrec.commands = studentAnalysis.commands;
     return anrec;
 }
@@ -257,10 +258,93 @@ function calculateMistakeFactor(studentAnalysis){
 function courseTatusReportPerStudent(studentAnList) {
     console.log("JÄRJESTELLÄÄN VIRHEIDEN MUKAAN");
     console.log("Sort by student");
-    console.table(studentAnList);
+
+    //console.table(studentAnList);
+    for (const studentIterator of studentAnList) {
+        console.log(studentIterator);
+        console.log("============================================================");
+        console.log(studentIterator.student.surname + " " + studentIterator.student.givenName);
+        console.log("============================================================");
+        console.log("JSHint errors: "+studentIterator.studentErrorFactor + " Variable deviations: " + studentIterator.variableFactor + " required structure deviations: " + studentIterator.commandFactor);
+        console.log("Task details, summing up:")
+        console.log("_____________________________________________________________");
+        for (const task of studentIterator.taskAnalysis) {
+            //console.log(buildTaskName(task.task) +": "+ sumUpErrors(task.errors.errortxt));
+            var testi2 = sumErrorTypes(task.errorRawList);
+            var testi3 = elementCountsToString(testi2);
+            console.log(buildTaskName(task.task) +": "+ testi3);
+            //console.log(testi3);
+            if(task.variables.misscount>0){
+                //console.log("Suspected copy-paste mistake"+": " + task.variables.missDetails);
+            }
+
+        }
+    }
+}
+
+function elementCountsToString(countlist){
+    //console.log(countlist);
+    var resultstring = "";
+    for (const errite of countlist) {
+        resultstring = resultstring + errite.errname + ": " + errite.count + ", "; 
+    }
+    return resultstring; 
+}
+
+function sumErrorTypes(errorlist){
+    var similarErrorsList = [];
+    //var errstring =errorlist[0];
+    for (const iteraw of errorlist) {
+        var found = similarErrorsList.find(function(element) {
+           if(element.errname==iteraw.raw){
+               //console.log(iteraw.raw);
+               return true;
+           }
+           //console.log(element);
+        });
+        if(found){
+            found.count++;
+        } else {
+            similarErrorsList.push({errname: iteraw.raw, count: 1});
+        }
+    }
+    return similarErrorsList;
+}
+
+function sumUpErrors(text){
+    var summing=[];
+    summing.push("used out of scope");
+    summing.push("Missing semicolon");
+    summing.push("Expected an identifier");
+    summing.push("Expected an operator");
+    summing.push("Unrecoverable syntax error");
+    summing.push("Unclosed string");
+    summing.push("Expected an identifier and instead");
+    summing.push("Expected an assignment or function call");
+
+    var resulttext = "";
+    var totalKnownCount = 0;
+    //console.log(keycount);
+    for (const sumtex of summing) {
+        var re = new RegExp(sumtex, 'g');
+        var keycount = (text.match(re) || []).length;
+        totalKnownCount = totalKnownCount + keycount; 
+        if(keycount>0)
+            resulttext = resulttext + "; " + sumtex + ": "+keycount+". ";
+    }
+    if ((text.length>0) && (totalKnownCount==0))
+        resulttext=resulttext + " there are unknown warnings";
+    return resulttext;
 
 }
 
+function buildTaskName(longTaskName){
+    var firstDash = longTaskName.indexOf('-');//first dash
+    var secondDash = longTaskName.indexOf('-',firstDash+1);
+    var lastSpace = longTaskName.lastIndexOf(' ');
+    var result = longTaskName.slice(secondDash,lastSpace);
+    return result;
+}
 function courseStatusReportPerStudent(){
     // report every help/intervention needing student 
     // order by error count of student, max errors or missing submissions first. 
@@ -273,7 +357,9 @@ function courseStatusReportPerStudent(){
 }
 
 if (require.main === module) {
+    //sumUpErrors("Missing semicolon. line: 10! Missing semicolon. line: 12! Missing semicolon. line: 14! Missing semicolon. line: 24! Missing semicolon. line: 31! Missing semicolon. line: 40! Missing semicolon. line: 51! Missing semicolon. line: 69! Missing semicolon. line: 72! Expected an identifier and instead saw '{a}'. line: 84!");
     getConfData();
+
 /*    var confDone = fs.existsSync("\alphabet.json");
     if (!confDone){
         readDirectoryFileNames(); 

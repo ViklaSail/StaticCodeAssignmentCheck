@@ -179,6 +179,7 @@ function processSubmission(scenario, student, tiedostonimi, stringsToCheck, cont
   submission.student = student;
   submission.file = tiedostonimi;
   submission.errors = errorObject;
+  submission.errorRawList = errorList;
   submission.commands = commandWarnings;
   submission.variables =variableWarnings;
  
@@ -189,6 +190,7 @@ function reduceErrors(list){
   var errorObject = {"errcount": list.length};
   var errline ="";
   var reducedErrorList = [];
+  //var errorTypeList = [];
   if(list){
     for(i=0;i<list.length;i++){
       reducedErrorList.push(list[i].raw+" line: "+list[i].line)
