@@ -49,15 +49,22 @@ function create_email(f,s){
 }
 
 
+<<<<<<< HEAD
 
 function get_all_Students(targetName, csvpath, callback) {
     var records = [];
+=======
+function get_all_Students(callback) {
+  var records = [];
+  row_count = 0;
+>>>>>>> 3d0b2bd (Beta unit testing)
   fs.createReadStream(csvpath)
     .on('error', () => {
         // handle error
     })
     .pipe(csv())
     .on('data', (row)  => {
+        row_count++
         var generated_Data = generatestudents(1);
         var First_name = generated_Data[0];
         var email = generated_Data[2];
@@ -121,9 +128,16 @@ function csvWriterGeneratorSingleton(path){
    return writerToReturn;
 }
 // Writing
+<<<<<<< HEAD
 function callbackAsParameter(targetName,y){
     csvWriterGeneratorSingleton(targetName).writeRecords(y)
+=======
+function callbackAsParameter(y){
+    writen_row = 0
+    csvWriter.writeRecords(y)
+>>>>>>> 3d0b2bd (Beta unit testing)
         .then(() => {
+            written_row++
             console.log("Names replaced !")
         });;
 } 
