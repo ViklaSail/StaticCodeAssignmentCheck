@@ -77,6 +77,7 @@ function get_all_Students(targetName, csvpath, callback) {
     .on('end', () => {
         // handle end of CSV
         callback(targetName, records);
+        console.log("end of line");
   });
 }
 // Calling and Printing
