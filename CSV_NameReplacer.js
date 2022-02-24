@@ -1,13 +1,12 @@
 const fs = require('fs');
 const csv = require('csv-parser');
-const csvpath = "./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv";
+const csvpath = "./T42T177OJ-3001-Torstain pakolliset tehtävät-vastaukset.csv";
 var XLSX = require("xlsx");
 var workbook = XLSX.readFile("Finnish_Names_Modified.xlsx");
 let worksheet_First = workbook.Sheets[workbook.SheetNames[0]];
 let worksheet_Last = workbook.Sheets[workbook.SheetNames[1]];
 var First_Names = [];
 var Last_Names = [];
-var records = [];
 
 /// Name Generate
 
@@ -41,13 +40,14 @@ function generatestudents(number_of_students) {
 }
 
 function create_email(f,s){
-    new_string = f + "."+ s + "@edu.lapinamk.fi"
+    new_string = f + "."+ s + "@student.uni.com"
     return new_string.toLowerCase();
 
 }
 
 
 function get_all_Students(callback) {
+  var records = [];
   fs.createReadStream(csvpath)
     .on('error', () => {
         // handle error
