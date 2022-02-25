@@ -68,48 +68,7 @@ function get_all_Students(csvpath,callback) {
         // handle error
     })
     .pipe(csv())
-    .on('data', (row)  => {
-      //TODO: Andreas: loop through multiple questions/answers
-        var email = row["Sähköpostiosoite"];
-        if (email) {
-          var timestamp = row["Suoritettu"];
-          if (!timestamp) {
-            console.log("timestamp undefined" + csvpath);
-          };
-          var date = convert_timestamp(timestamp, csvpath);  
-          var First_name = row["Etunimi"];
-          var surname = remove_from_email(email);
-          var question = row["Kysymys 1"];
-          var answer = row["Vastaus 1"];
-          findCapitalLetterWords(question);
-          if ((question.includes("Required Structures:")) && (question.includes("Required Variables:"))) {
-            var structure_array = find_structure(question);
-            var varbles_array = find_variables(question);
-            var variable_list = create_object_variables(varbles_array);
-            var structure_list = create_object_stucture(structure_array);
-          } else {
-            var structure_list = [];
-            var variable_list= [];
-
-            structure_list[row] = {
-            name: "Error",
-            value: 0
-            };
-
-            variable_list[row] = {
-              name: "Error",
-              value: 0
-            };
-          }
-
-          var checkThese = {"variables":variable_list, "commands":structure_list};
-          var name = {"givenName":First_name, "surname":surname};
-          var submission = {"submission":answer, "time":date};
-          var taskOfStudents = {checkThese, name, submission,};
-          //cleared_from_dublicates.push(taskOfStudents);
-          submissionlist.push(taskOfStudents);
-        }
-    })
+    .on('data', rowhandling(row))
     .on('end', () => {
       if (submissionlist.length>0){
         //submissionlist.sort( compare );
@@ -129,6 +88,49 @@ function get_all_Students(csvpath,callback) {
   */    
   });
 }
+
+function rowhandling(row) {
+  //TODO: Andreas: loop through multiple questions/answers
+    var email = row["Sähköpostiosoite"];
+    if (email) {
+      var timestamp = row["Suoritettu"];
+      if (!timestamp) {
+        console.log("timestamp undefined" + csvpath);
+      };
+      var date = convert_timestamp(timestamp, csvpath);  
+      var First_name = row["Etunimi"];
+      var surname = remove_from_email(email);
+      var question = row["Kysymys 1"];
+      var answer = row["Vastaus 1"];
+      findCapitalLetterWords(question);
+      if ((question.includes("Required Structures:")) && (question.includes("Required Variables:"))) {
+        var structure_array = find_structure(question);
+        var varbles_array = find_variables(question);
+        var variable_list = create_object_variables(varbles_array);
+        var structure_list = create_object_stucture(structure_array);
+      } else {
+        var structure_list = [];
+        var variable_list= [];
+
+        structure_list[row] = {
+        name: "Error",
+        value: 0
+        };
+
+        variable_list[row] = {
+          name: "Error",
+          value: 0
+        };
+      }
+
+      var checkThese = {"variables":variable_list, "commands":structure_list};
+      var name = {"givenName":First_name, "surname":surname};
+      var submission = {"submission":answer, "time":date};
+      var taskOfStudents = {checkThese, name, submission,};
+      //cleared_from_dublicates.push(taskOfStudents);
+      submissionlist.push(taskOfStudents);
+    }
+};
 
 function stripTheList(submissionList){
   submissionList.forEach(function(item, index, object) {
