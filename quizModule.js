@@ -195,23 +195,23 @@ function convert_timestamp(x,csvpath) {
   var time = x.slice(-5);
   var hour = time.split(':')[0];
   var minute = time.slice(-2); 
-  date = new Date(year, month, day, hour, minute, 00);
+  date = new Date(year, month, day, hour, minute, 0);
   return date;
 }
 
 function finnish_month_converter(x) {
-  if (x = "tammikuu") { x = 01}
-  else if (x = "helkmikuu") {x = 02}
-  else if (x= "maaliskuu") {x=03}
-  else if (x="huhtikuu") {x=04}
-  else if (x = "toukokuu") {x = 05}
-  else if (x= "kesäkuu") {x=06}
-  else if (x="heinäkuu") {x=07}
-  else if (x = "elokuu") {x = 08}
-  else if (x= "syyskuu") {x=09}
-  else if (x="lokakuu") {x=10}
-  else if (x = "marraskuu") {x = 11}
-  else if (x= "joulukuu") {x=12}
+  if (x = "tammikuu") { x = 0}
+  else if (x = "helkmikuu") {x = 1}
+  else if (x= "maaliskuu") {x=2}
+  else if (x="huhtikuu") {x=3}
+  else if (x = "toukokuu") {x = 4}
+  else if (x= "kesäkuu") {x=5}
+  else if (x="heinäkuu") {x=6}
+  else if (x = "elokuu") {x = 7}
+  else if (x= "syyskuu") {x=8}
+  else if (x="lokakuu") {x=9}
+  else if (x = "marraskuu") {x = 10}
+  else if (x= "joulukuu") {x=11}
   else  {x="unknow format"};
   return x;
 }
@@ -255,15 +255,6 @@ function string_contains_number(st) {
       return false;
 }
 }
-
-function does_nothing(st) {
-  if (st.includes("(")) {
-    return /\d/.test(st);
-  } else {
-      return false;
-}
-}
-
 
 
 function dublivate_remove(d) {
@@ -355,6 +346,7 @@ if (require.main === module) {
 module.exports = {
     goo: "googoo",
     //getQuizSubmissions: testGetQuizSubmissions
+    finnish_month_converter,
     getQuizSubmissions: get_all_Students, 
     GetTaskCheckParameters: testGetTaskCheckParameters
     

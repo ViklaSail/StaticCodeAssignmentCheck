@@ -1,9 +1,10 @@
 {
-  "name": "staattinenkoodicheck",
+  "name": "c",
   "version": "1.0.0",
   "description": "staattinen tarkastus",
   "main": "codeCheck.js",
   "dependencies": {
+    "axios": "^0.26.0",
     "csv-parser": "^3.0.0",
     "csv-writer": "^1.6.0",
     "jest": "^27.5.1",
@@ -19,5 +20,17 @@
     "test": "jest"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ViklaSail/StaticCodeAssignmentCheck.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ViklaSail/StaticCodeAssignmentCheck/issues"
+  },
+  "homepage": "https://github.com/ViklaSail/StaticCodeAssignmentCheck#readme",
+  "keywords": []
 }

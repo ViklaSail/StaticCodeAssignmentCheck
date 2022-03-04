@@ -1,6 +1,8 @@
-const { finnish_month_converter } = require('./quizModule');
+const converters = require('./basic');
 
-test('should output number of finnish month', () => {
-    const month_number = finnish_month_converter(maaliskuu);
-    expect(month_number).toBe(3);
+describe('Converters', () => { 
+ test('should output number of finnish month', () => {
+    const month_number = converters.conv("maaliskuu");
+    expect(month_number).toBe(2);
 });
+})
