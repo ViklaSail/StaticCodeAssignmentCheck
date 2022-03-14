@@ -21,6 +21,7 @@ var cleared_from_dublicates = [];
 const csvpath = "./T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-TESTI.csv";
 var variable_list= [];
 var structure_list = [];
+var submissionlist = []
 var listOfQuizAnswers = [];
 var allTaskCheckWords = []; //
 
@@ -62,7 +63,6 @@ function readAllTaskChecks(){
 }
 
 function get_all_Students(csvpath,callback) {
-  var submissionlist = []
   fs.createReadStream(csvpath)
     .on('error', () => {
         // handle error
@@ -347,10 +347,10 @@ module.exports = {
     goo: "googoo",
     //getQuizSubmissions: testGetQuizSubmissions
     finnishMonthConverter: finnish_month_converter,
+    date_check: convert_timestamp,
+    row_data_extraction: rowhandling,
     getQuizSubmissions: get_all_Students, 
     GetTaskCheckParameters: testGetTaskCheckParameters
-    
-    
 };
 
 
