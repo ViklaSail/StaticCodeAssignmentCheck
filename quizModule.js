@@ -183,36 +183,39 @@ function convert_timestamp(x,csvpath) {
     return 0;
   }
   //console.log("x value " + x);
-  day = x.split('.')[0]; //// Could be problem if format is 9 instead of 09
+  var day = x.split('.')[0]; //// Could be problem if format is 9 instead of 09
+  day = Number(day);
   var month = x.split(' ')[1];
   if(!month){
     console.log("month undefined "+csvpath);
   }
   month = month.substring(month.indexOf(' ') + 0);
-  month = finnish_month_converter(month);
+  var month_numb = finnish_month_converter(month);
   var year = x.split(' ')[2];
   year = year.substring(year.indexOf(' ') + 1);
   var time = x.slice(-5);
   var hour = time.split(':')[0];
+  hour = Number(hour);
   var minute = time.slice(-2); 
-  date = new Date(year, month, day, hour, minute, 00);
+  minute = Number(minute);
+  date = new Date(year, month_numb, day, hour, minute, 0);
   return date;
 }
 
 function finnish_month_converter(x) {
-  if (x = "tammikuu") { x = 01}
-  else if (x = "helkmikuu") {x = 02}
-  else if (x= "maaliskuu") {x=03}
-  else if (x="huhtikuu") {x=04}
-  else if (x = "toukokuu") {x = 05}
-  else if (x= "kesäkuu") {x=06}
-  else if (x="heinäkuu") {x=07}
-  else if (x = "elokuu") {x = 08}
-  else if (x= "syyskuu") {x=09}
-  else if (x="lokakuu") {x=10}
-  else if (x = "marraskuu") {x = 11}
-  else if (x= "joulukuu") {x=12}
-  else  {x="unknow format"};
+  if (x == "tammikuuta") { x = 0}
+  else if (x == "helkmikuuta") {x = 1}
+  else if (x== "maaliskuuta") {x=2}
+  else if (x=="huhtikuuta") {x=3}
+  else if (x == "toukokuuta") {x = 4}
+  else if (x== "kesäkuuta") {x=5}
+  else if (x=="heinäkuuta") {x=6}
+  else if (x == "elokuuta") {x = 7}
+  else if (x== "syyskuuta") {x=8}
+  else if (x=="lokakuuta") {x=9}
+  else if (x == "marraskuuta") {x = 10}
+  else if (x== "joulukuuta") {x=11}
+  else  {x=="unknow format"};
   return x;
 }
     
@@ -355,6 +358,8 @@ if (require.main === module) {
 module.exports = {
     goo: "googoo",
     //getQuizSubmissions: testGetQuizSubmissions
+    date_check: convert_timestamp,
+    finnish_month_converter: finnish_month_converter,
     getQuizSubmissions: get_all_Students, 
     GetTaskCheckParameters: testGetTaskCheckParameters
     
