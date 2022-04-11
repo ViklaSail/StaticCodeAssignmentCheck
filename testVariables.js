@@ -23,6 +23,16 @@ taskObjectRegressionTest = {
 
   //T42T177OJ-3001-Peräkkäisyys-periaate ja muuttujat (keskiviikkoiltaan mennessä)-vastaukset.csv
 
+  taskOfStudent2= {
+    checkThese: { 
+      variables: [{name:"arvaaLuku", count: 1}, {name:"verrokki",count:1} ],
+      commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1} ]
+      //linecount: 20
+      },
+      name : {givenName: "testinimi2", surname: "sukunimi2"}, //for testing purposes
+      submission: "javascript code for inspection2222"
+    };
+
 commonCheckStruct = {checkThese: { 
   variables: [{name:"", count: 0} ],
   commands:  [{name:"function", count: 1}, {name:"while", count:1}, {name:"if",count:1} ],

@@ -405,7 +405,7 @@ module.exports = {
 
 /**
  * TASK LIST
- * TODO: quiz anonymisation script
+ * TODO: quiz anonymisation script 
  * Reads file with real name - fake name pairs
  * 
  * TODO: dublicate stripping: older submissions of the same person removed. 
