@@ -13,3 +13,14 @@ This is not quiz. This is for task folders
 2. Function returns object having check structure for that folder (task);
     (checking details are similar to quiz-task)
 
+
+structure format LIST OF FOLLOWING ONE PER FOLDER
+
+{checkThese: { 
+  variables: [{name:"", count: 0} ],
+  commands:  [{name:"", count: 0} ],
+  codeLength: 5
+  },
+  name : {givenName: "NOT NEEDED", surname: "NOT NEEDED"},
+  submission: "TO BE DEFINED"
+}
