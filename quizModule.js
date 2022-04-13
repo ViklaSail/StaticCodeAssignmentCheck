@@ -14,6 +14,7 @@
 */
 
 const { getQuizSubmissions } = require('./testVariables');
+const path = require('path');
 var fake = require('./testVariables');
 const fs = require('fs');
 const csv = require('csv-parser');
@@ -23,7 +24,8 @@ var variable_list= [];
 var structure_list = [];
 var submissionlist = []
 var listOfQuizAnswers = [];
-var allTaskCheckWords = []; //
+var allTaskCheckWords = [];
+ //
 
 function testGetQuizSubmissions(timeoutCallback){//test function simulating long lasting async
     var fakeCheckStructureList = [];
@@ -334,6 +336,45 @@ function requiredStuff(textbodycapital, commandsRun=true) {
   return requiredwords;
 }
 
+// Part 1 (preparations,for teachers manual udpating regarding tasks) this is run once
+
+function getFolderNames(folderPath, Part1) {
+  const folderList = [];
+  const directoryPath = path.join(__dirname, folderPath);
+  fs.readdir(directoryPath, function (err, files) {
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    } 
+    //saving all files names in a list using forEach
+    files.forEach(function (file) {
+        folderList.push(file);
+    });
+    Part1(folderList);
+});
+};
+
+function Part1(folderList) {
+  ALLSTRUCTURES = [];
+  ALLFOLDERS = folderList;
+  for (x=0; x<ALLFOLDERS.length; x++) {
+    ALLSTRUCTURES[x] = {checkThese: { variables: [{name:"", count: 0} ], commands: [{name:"", count: 0} ], codeLength: 5 }, name : {givenName: "NOT NEEDED", surname: "NOT NEEDED"}, submission: ALLFOLDERS[x] 
+  }
+  }
+  var dictstring = JSON.stringify(ALLSTRUCTURES);
+  ALLOBJECTS = {};
+  //ALLFOLDERS = getFolderNames(file);
+  for (x=0; x<ALLFOLDERS.length; x++) {
+    var dictstring = JSON.stringify(ALLSTRUCTURES, null, 1);
+    //var dictstring = JSON.stringify(ALLSTRUCTURES[x], null, 1);
+    fs.writeFile(" taskChecking.json", dictstring, (err) => { 
+      if (err) { 
+        console.log(err); 
+      } 
+    });
+  }  
+}
+
+
 
 if (require.main === module) {
   findCapitalLetterWords("HERE'S AN UPPERCASE PART of the string");
@@ -341,7 +382,11 @@ if (require.main === module) {
   findCapitalLetterWords("IF ELSE IF WHILE FOR DO WHILE FUNCTION");
   findCapitalLetterWords("tehtävässä funktion nimeksi TESTAA ja TESTAALISAA. käytä seuraavia rakenteita: FUNCTION, IF, WHILE. muuten teet niinkuin kykenet");
   testGetTaskCheckParameters("T");
+  getFolderNames("Mock", Part1)
 }
+
+
+
 
 module.exports = {
     goo: "googoo",
@@ -354,7 +399,9 @@ module.exports = {
 };
 
 
-//get_all_Students(callbackAsParameter); Calling the main functio of file
+//Part1("Mock");
+//get_all_Students(csvpath);
+//get_all_Students(csvpath, callbackAsParameter); //Calling the main functio of file
 /**
  * Specifications and settings for different task descriptions in the quiz. 
  * Different options for required and counted things: 
