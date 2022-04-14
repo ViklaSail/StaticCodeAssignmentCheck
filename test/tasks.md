@@ -28,10 +28,13 @@ structure format LIST OF FOLLOWING ONE PER FOLDER
 }
 
 # Specification preparations project
-Research and development
+Research and development. It is by our experiences obvious that task communication need to be supported better. first goal is to have task and specifications easily navigated and updated. Following goals later: **unofficial communication** (chatting) saved and tagged to specification elements/documents as well as possible (discussion resolutions/notes that added to specs?). 
 ## git based specification system
 idea: Code and specs in git, connected by git commits and possibly git tags. Achieving traceability from specs to code and back. 
 Properties: need to have links from diagram elements like class to detail-document and/or detail-diagram like from class to state-diagram of that class. directory tree, but net structure between diagrams, diagram elements and documents. 
+
+0. Evaluating open source UML tools. Developing evaluation criteria further: components links to sub-diagrams. editor support. developer count, usage volume, last stable relase. development intensity. 
+Found tools so far: PlantUML, umlet, textuml, NClass, Jetuml. https://github.com/gbaychev/NClass https://www.jetuml.org/  http://abstratt.github.io/textuml/
 
 1. task: finding and evaluating editors having pair programming capabilities. Other capabilities to compare? list and discuss. 
 Check support for PlantUML and Umlet. 
