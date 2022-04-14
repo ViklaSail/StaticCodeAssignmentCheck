@@ -33,8 +33,9 @@ Research and development. It is by our experiences obvious that task communicati
 idea: Code and specs in git, connected by git commits and possibly git tags. Achieving traceability from specs to code and back. 
 Properties: need to have links from diagram elements like class to detail-document and/or detail-diagram like from class to state-diagram of that class. directory tree, but net structure between diagrams, diagram elements and documents. 
 
-0. Evaluating open source UML tools. Developing evaluation criteria further: components links to sub-diagrams. editor support. developer count, usage volume, last stable relase. development intensity. 
+0. Evaluating open source UML tools. Developing evaluation criteria further: components links to sub-diagrams. editor support. developer count, usage volume, last stable relase. development intensity. (support uxf-> the umlet standardized format for UML diagrams) 
 Found tools so far: PlantUML, umlet, textuml, NClass, Jetuml. https://github.com/gbaychev/NClass https://www.jetuml.org/  http://abstratt.github.io/textuml/
+[evaluation results](./taskResultDocs/UMLToolEvaluation.md)
 
 1. task: finding and evaluating editors having pair programming capabilities. Other capabilities to compare? list and discuss. 
 Check support for PlantUML and Umlet. 
