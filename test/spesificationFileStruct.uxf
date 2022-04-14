@@ -1,0 +1,33 @@
+<diagram program="umletino" version="14.3.0"><zoom_level>10</zoom_level><element><id>UMLHierarchy</id><coordinates><x>110</x><y>100</y><w>460</w><h>600</h></coordinates><panel_attributes>type=Package
+project root
+	UseCaseDiagram
+	UseCase1Description
+	UseCase2Description
+	classDiagramFolder
+		classDiagram
+			ClassOne
+			ClassTwo
+	stateDiagramFolder
+		stateDiagramForClassOne
+	DeploymentDiagramFolder
+		installationInfrastructureDiagram
+			virtualServerElement
+			physicalServerElement
+	miscSpecFolder
+		specForInstallationInfrastructure
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>140</y><w>160</w><h>100</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n</panel_attributes><additional_attributes>30;80;140;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>140</y><w>90</w><h>70</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n</panel_attributes><additional_attributes>30;50;70;20;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>460</y><w>90</w><h>160</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n</panel_attributes><additional_attributes>10;140;70;120;70;20;20;10</additional_attributes></element><element><id>Relation</id><coordinates><x>330</x><y>300</y><w>70</w><h>120</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n</panel_attributes><additional_attributes>30;100;40;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>120</y><w>190</w><h>180</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n</panel_attributes><additional_attributes>30;160;140;120;170;10;10;30</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>210</y><w>220</w><h>270</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n</panel_attributes><additional_attributes>100;250;200;140;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>110</x><y>30</y><w>610</w><h>50</h></coordinates><panel_attributes>halign=left
+One example what could structured specification look like 
+
+Links between elements, diagrams and text documents
+
+
+</panel_attributes><additional_attributes></additional_attributes></element></diagram>
