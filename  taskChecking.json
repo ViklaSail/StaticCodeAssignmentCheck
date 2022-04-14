@@ -1,0 +1,77 @@
+[
+ {
+  "FolderName": "1FOLD",
+  "Structure": {
+   "checkThese": {
+    "variables": [
+     {
+      "name": "",
+      "count": 0
+     }
+    ],
+    "commands": [
+     {
+      "name": "",
+      "count": 0
+     }
+    ],
+    "codeLength": 5
+   },
+   "name": {
+    "givenName": "NOT NEEDED",
+    "surname": "NOT NEEDED"
+   },
+   "submission": "tobedefined"
+  }
+ },
+ {
+  "FolderName": "FOLD2",
+  "Structure": {
+   "checkThese": {
+    "variables": [
+     {
+      "name": "",
+      "count": 0
+     }
+    ],
+    "commands": [
+     {
+      "name": "",
+      "count": 0
+     }
+    ],
+    "codeLength": 5
+   },
+   "name": {
+    "givenName": "NOT NEEDED",
+    "surname": "NOT NEEDED"
+   },
+   "submission": "tobedefined"
+  }
+ },
+ {
+  "FolderName": "FOLD3",
+  "Structure": {
+   "checkThese": {
+    "variables": [
+     {
+      "name": "",
+      "count": 0
+     }
+    ],
+    "commands": [
+     {
+      "name": "",
+      "count": 0
+     }
+    ],
+    "codeLength": 5
+   },
+   "name": {
+    "givenName": "NOT NEEDED",
+    "surname": "NOT NEEDED"
+   },
+   "submission": "tobedefined"
+  }
+ }
+]
