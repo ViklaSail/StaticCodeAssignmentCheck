@@ -337,7 +337,7 @@ function requiredStuff(textbodycapital, commandsRun=true) {
   return requiredwords;
 }
 
-// Part 1 (preparations,for teachers manual udpating regarding tasks) this is run once
+// 
 
 function getFolderNames(folderPath, Part1) {
   const folderList = [];
