@@ -25,6 +25,7 @@ var structure_list = [];
 var submissionlist = []
 var listOfQuizAnswers = [];
 var allTaskCheckWords = [];
+var teacherTaskCheck = [];
  //
 
 function testGetQuizSubmissions(timeoutCallback){//test function simulating long lasting async
@@ -357,8 +358,13 @@ function Part1(folderList) {
   ALLSTRUCTURES = [];
   ALLFOLDERS = folderList;
   for (x=0; x<ALLFOLDERS.length; x++) {
-    ALLSTRUCTURES[x] = {checkThese: { variables: [{name:"", count: 0} ], commands: [{name:"", count: 0} ], codeLength: 5 }, name : {givenName: "NOT NEEDED", surname: "NOT NEEDED"}, submission: ALLFOLDERS[x] 
-  }
+    //ALLSTRUCTURES[x] = {checkThese: { variables: [{name:"", count: 0} ], commands: [{name:"", count: 0} ], codeLength: 5 }, name : {givenName: "NOT NEEDED", surname: "NOT NEEDED"}, submission: ALLFOLDERS[x] }
+    //ALLSTRUCTURES[x] = {ALLFOLDERS[x]: {checkThese: { variables: [{name:"", count: 0} ], commands: [{name:"", count: 0} ], codeLength: 5 }, name : {givenName: "NOT NEEDED", surname: "NOT NEEDED"}, submission: "tobedefined" }}
+    ALLSTRUCTURES[x] = {FolderName: ALLFOLDERS[x], Structure: {checkThese: { variables: [{name:"", count: 0} ], commands: [{name:"", count: 0} ], codeLength: 5 }, name : {givenName: "NOT NEEDED", surname: "NOT NEEDED"}, submission: "tobedefined" }}
+    if (ALLSTRUCTURES[x].FolderName == "FOLD2") {
+      console.log(ALLSTRUCTURES[x]);
+    }
+    //ALLSTRUCTURES[x] = {FOLDERSNAME: ALLFOLDERS[x]}
   }
   var dictstring = JSON.stringify(ALLSTRUCTURES);
   ALLOBJECTS = {};
@@ -374,7 +380,47 @@ function Part1(folderList) {
   }  
 }
 
+function jsonReader(filePath, cb) {
+  fs.readFile(filePath, (err, fileData) => {
+      if (err) {
+          return cb && cb(err)
+      }
+      try {
+          const object = JSON.parse(fileData)
+          return cb && cb(null, object)
+      } catch(err) {
+          return cb && cb(err)
+      }
+  })
+}
 
+
+//usage:
+
+function readjson() {
+  fs.readFile(' taskChecking.json', 'utf8', (err, jsonString) => {
+    if (err) {
+      console.log("File read failed:", err)
+      return
+    }
+    try {
+      const data = JSON.parse(jsonString);
+      teacherTaskCheck = data;
+      //Part2(data);
+    } 
+    catch(err) {
+      console.log('Error parsing JSON string:', err)
+    }  
+  })
+}
+
+
+
+function Part2(keyfolder) {
+  //let myObjects = [{"name":"a", "value":0}, {"name":"b", "value":1},{"name":"c", "value":2}];
+  let found = teacherTaskCheck.find(e => e.FolderName === keyfolder);
+  return found;
+}
 
 if (require.main === module) {
   findCapitalLetterWords("HERE'S AN UPPERCASE PART of the string");
@@ -382,7 +428,13 @@ if (require.main === module) {
   findCapitalLetterWords("IF ELSE IF WHILE FOR DO WHILE FUNCTION");
   findCapitalLetterWords("tehtävässä funktion nimeksi TESTAA ja TESTAALISAA. käytä seuraavia rakenteita: FUNCTION, IF, WHILE. muuten teet niinkuin kykenet");
   testGetTaskCheckParameters("T");
-  getFolderNames("Mock", Part1)
+  //getFolderNames("Mock", Part1)
+  readjson();
+  // Timeout MUST be eliminated for REAL usage!!
+  setTimeout(() => {
+    Part2("FOLD2");
+    console.log("Wait a second to read JSON");
+  }, 10000);
 }
 
 
