@@ -16,7 +16,7 @@ This is not quiz. This is for task folders
     (checking details are similar to quiz-task)
 
 
-# Folder structure format
+## Folder structure format
 structure format LIST OF FOLLOWING ONE PER FOLDER
 {checkThese: { 
   variables: [{name:"", count: 0} ],
@@ -30,8 +30,10 @@ structure format LIST OF FOLLOWING ONE PER FOLDER
 # Specification preparations project
 Research and development. It is by our experiences obvious that task communication need to be supported better. first goal is to have task and specifications easily navigated and updated. Following goals later: **unofficial communication** (chatting) saved and tagged to specification elements/documents as well as possible (discussion resolutions/notes that added to specs?). 
 ## git based specification system
-idea: Code and specs in git, connected by git commits and possibly git tags. Achieving traceability from specs to code and back. 
-Properties: need to have links from diagram elements like class to detail-document and/or detail-diagram like from class to state-diagram of that class. directory tree, but net structure between diagrams, diagram elements and documents. 
+idea: Code and specs in git, connected by git commits and possibly with help of git tags. Achieving traceability from specs to code and back. 
+Properties: need to have links from diagram elements like class to detail-document and/or detail-diagram. Example: from class to state-diagram of that class. 
+Specifications are saved in directory tree.  By links a net structure exists between diagrams, diagram elements and documents. UML is used. Example of [file structure](./spesificationFileStruct.uxf). And links between files and components should ideally functionlike [this one](spesificationFileStruct.uxf). 
+Idea: how to keep private personal notes on task nicely available and linked to task? You can have a folder outside repository and have a link to it [like this](../../personalNotes/specSystemNotes.md). or then inside repository folder but outside repository control. From every task there should be link to task solution document, which is inside repository. 
 
 0. Evaluating open source UML tools. Developing evaluation criteria further: components links to sub-diagrams. editor support. developer count, usage volume, last stable relase. development intensity. (support uxf-> the umlet standardized format for UML diagrams) 
 Found tools so far: PlantUML, umlet, textuml, NClass, Jetuml. https://github.com/gbaychev/NClass https://www.jetuml.org/  http://abstratt.github.io/textuml/
@@ -42,9 +44,15 @@ Check support for PlantUML and Umlet.
 
 2. task: Study how to link a diagram element to document in subfolder. For two tools: PlantUML and Umlet
 PekkaR studies: seems that relative links are not possible? Similar functionality as with vscode MD documents is preferred: click link when editing=>open diagram link points to.
-
+https://github.com/umlet/umlet/issues/122 umlet seems not to have this yet. 
+another place to check for umlet: umlet VScode plugin. or any other editor plugin.  
 
 3. task: preparing to modify open source components. Find link handling in PlantUML 
 
 4. task: preparing to modify open source components. Find link handling in Umlet. 
+
+5. Task: in case nothing works with relative links, start planning scripts used together with local absolute file-paths according to following link: https://stackoverflow.com/questions/7857416/file-uri-scheme-and-relative-files
+file:///absolute/path/to/file
+requirement1: when cloning repository to another folder, flle links need to be updated accordingly.  
+Requirement2: when copying or pushing files to a web site, file links need to keep working.
 

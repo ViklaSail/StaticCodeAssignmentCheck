@@ -7,6 +7,9 @@
  *  - if required word is not found, then error should be recorded on it. 
  *  */
   // https://stackoverflow.com/questions/4009756/how-to-count-string-occurrence-in-string
+
+  // loops https://stackoverflow.com/questions/9329446/for-each-over-an-array-in-javascript
+  // unittesting https://www.testim.io/blog/best-unit-testing-framework-for-javascript/
   // 
 var codeTesting = "var nimi = \"jaakko\";\r\nvar ika = \"20\";\r\nvar ammatti =\"huoltomies\"\r\n\r\nalert(nimi);\r\nalert(ika);\r\nalert(ammatti);\r\n\r\n\r\n\r\n";
 
