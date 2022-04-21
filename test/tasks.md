@@ -41,6 +41,9 @@ Found tools so far: PlantUML, umlet, textuml, NClass, Jetuml. https://github.com
 
 1. task: finding and evaluating editors having pair programming capabilities. Other capabilities to compare? list and discuss. 
 Check support for PlantUML and Umlet. 
+* Atom alternatives study: check if good ones, should support pair programming. 
+* Atom plantuml support and umlet support (plugin)
+* gitlab plantuml or any other uml tool support. (gerrit)
 
 2. task: Study how to link a diagram element to document in subfolder. For two tools: PlantUML and Umlet
 PekkaR studies: seems that relative links are not possible? Similar functionality as with vscode MD documents is preferred: click link when editing=>open diagram link points to.
