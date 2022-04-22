@@ -59,3 +59,6 @@ file:///absolute/path/to/file
 requirement1: when cloning repository to another folder, flle links need to be updated accordingly.  
 Requirement2: when copying or pushing files to a web site, file links need to keep working.
 
+6. Task: Experiment with Hello World Setup for GitLab
+7. Task: Setting up ATOM and learning to install packages ( PlantUml)
+
